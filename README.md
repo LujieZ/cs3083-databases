@@ -1,14 +1,14 @@
 # cs3083-databases
 
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). Then an Express server was added in the `server` directory. The server is proxied via the `proxy` key in `package.json`.
+This project is the Databases final project for Adelle, Lujie, and Zi-meng. The project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). Then an Express server was added in the `server` directory. The server is proxied via the `proxy` key in `package.json`.
 
 ## Using this project
 
 Clone the project, change into the directory and install the dependencies.
 
 ```bash
-git clone https://github.com/philnash/react-express-starter.git
-cd react-express-starter
+git clone https://github.com/LujieZ/cs3083-databases.git
+cd cs3083-databases
 npm install
 ```
 
