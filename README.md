@@ -1,6 +1,6 @@
 # cs3083-databases
 
-This project is the Databases final project for Adelle, Lujie, and Zi-meng. The project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). Then an Express server was added in the `server` directory. The server is proxied via the `proxy` key in `package.json`.
+This project is the Databases final project for Adelle, Lujie, and Zi-Ming. The project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). Then an Express server was added in the `server` directory. The server is proxied via the `proxy` key in `package.json`.
 
 ## Using this project
 
