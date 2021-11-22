@@ -1,0 +1,34 @@
+body{
+  background-color: #372c2e;
+}
+
+  .topnav {
+      background-color: #372c2e;
+      overflow: hidden;
+  }
+
+  .topnav a {
+    float: left;
+    color: #dfdfdf;
+    text-align: center;
+    padding: 15px 19px;
+    text-decoration: none;
+    font-size: 18px;
+    font-family: 'Poppins',sans-serif;
+  }
+
+  .topnav-right {
+    float: right;
+  }
+  
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color:#d39348;
+    color: black;
+  }
+  
+  /* Add a color to the active/current link */
+  .topnav a.active {
+    background-color: #dfb834;
+    color: white;
+  }
