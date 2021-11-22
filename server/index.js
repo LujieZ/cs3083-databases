@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
 const path = require('path');
+const connection = require('./database');
 
 const port = process.env.API_PORT || 3001;
 const app = express();
@@ -24,6 +25,19 @@ app.get('/api/greeting', (req, res) => {
   const name = req.query.name || 'World';
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
+});
+
+app.get('/api/databaseTest', (req, res) => {
+  let row;
+  connection.query('SELECT * FROM Customer', (err, rows) => {
+    if (err) throw err;
+
+    console.log(rows);
+    row = rows;
+  });
+
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify({ data: row }));
 });
 
 app.listen(port, () =>
