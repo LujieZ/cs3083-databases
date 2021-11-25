@@ -41,6 +41,7 @@ app.get('/api/databaseTest', (req, res) => {
 });
 
 require('./routes/flights_routes.js')(app);
+require('./routes/user_routes.js')(app);
 
 app.listen(port, () =>
   console.log(`Express server is running on localhost:${port}`)

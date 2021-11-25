@@ -23,7 +23,7 @@ sql.query('SELECT * FROM Flight', (err, res) => {
         result(null, err);
         return;
       }
-  
+
       console.log('Flights ', res);
       result(null, res);
     });
