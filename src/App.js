@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import Demo from "./profile/profile";
+import Flight from "./flights/flight";
 import './App.css';
 
 const Navigation = () => {
@@ -12,7 +13,7 @@ const Navigation = () => {
             <Nav className='me-auto'>
               <Nav.Link href='/'>Home</Nav.Link>
               <Nav.Link href='/about'>About</Nav.Link>
-              <Nav.Link href='/users'>Flights</Nav.Link>
+              <Nav.Link href='/flights'>Flights</Nav.Link>
               <div className='topnav-right'>
                 <Nav.Link href='/profile'>My Account</Nav.Link>
               </div>
@@ -32,8 +33,8 @@ export default function App() {
           <Route path="/about">
             <About />
           </Route>
-          <Route path="/users">
-            <Users />
+          <Route path="/flights">
+            <Flight />
           </Route>
           <Route path="/profile">
             <Demo />
@@ -53,8 +54,4 @@ function Home() {
 
 function About() {
   return <h2 style={{'color': '#ffffff'}}>About</h2>;
-}
-
-function Users() {
-  return <h2 style={{'color': '#ffffff'}}>Flights</h2>;
 }

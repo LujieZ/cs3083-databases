@@ -1,22 +1,19 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
-const connection = mysql.createPool({
+let connection = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASS,
+  port: process.env.DB_PORT,
 });
 
-// Attempt to catch disconnects
-connection.on('connection', (Connection) => {
-  console.log('DB Connection established');
-
-  Connection.on('error', (err) => {
-    console.error(new Date(), 'MySQL error', err.code);
+  connection.getConnection(function(err) {
+    if (err) {
+      console.error('Error connecting: ' + err.stack);
+      return;
+    }
+    console.log('Connected as thread id: ' + connection.threadId);
   });
-  Connection.on('close', (err) => {
-    console.error(new Date(), 'MySQL close', err);
-  });
-});
 
-module.exports = connection;
+  module.exports = connection; 

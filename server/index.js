@@ -29,16 +29,18 @@ app.get('/api/greeting', (req, res) => {
 
 app.get('/api/databaseTest', (req, res) => {
   let row;
-  connection.query('SELECT * FROM Customer', (err, rows) => {
+  connection.query('SELECT * FROM Customer', function(err, rows) {
     if (err) throw err;
 
-    console.log(rows);
+    console.log('The solution is: ', rows[0].title)
     row = rows;
   });
 
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({ data: row }));
 });
+
+require('./routes/flights_routes.js')(app);
 
 app.listen(port, () =>
   console.log(`Express server is running on localhost:${port}`)
