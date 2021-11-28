@@ -11,6 +11,7 @@ const Customer = function createCustomer(customer) {
     this.phone_num = customer.phone_num;
     this.passport_num = customer.passport_num;
     this.passport_country = customer.passport_country;
+    this.passport_expiry = customer.passport_expiry;
     this.date_of_birth = customer.date_of_birth;
 };
 
@@ -48,5 +49,21 @@ Staff.findStaffInfo = (staffUsername, result) => {
           result(null, res);
         });
       };
+
+Customer.create = (customer, result) => {
+  sql.query('INSERT INTO Customer SET name=?, customer_email=?, password=?, building_num=?, street=?, city=?, state=?, phone_num=?, passport_num=?, passport_expiry=?, passport_country=?, date_of_birth=?',
+  [customer.name, customer.customer_email, customer.password, customer.building_number, customer.street, customer.city, customer.state, customer.phone_num, customer.passport_num, customer.passport_expiry, customer.passport_country, customer.date_of_birth],
+  (err, res) => {
+    if (err) {
+      console.log('error: ', err);
+      result(null, err);
+      return;
+    }
+
+    console.log('Customer: ', res);
+    result(null, res);
+  },
+);
+};
 
 module.exports = { Customer, Staff };

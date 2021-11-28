@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './profile.css';
 
 class Profile extends Component {
@@ -76,24 +77,26 @@ class Profile extends Component {
       <div className="Demo">
         <header className="Demo-header" style={{'color': '#ffffff'}}>
           <h2 style={{'fontSize': '23px'}}>You are not logged in! Log in to your account?</h2>
-          <p classNam='text-muted'> Or create an account here.</p>
+          <p style={{'fontSize': '17px'}}> Or <Link to='/registration' style={{color: "#de9e48"}}>create an account</Link>.</p>
           <form>
-            <label htmlFor="name" style={{'marginBottom': '7px'}}>User name: </label>
+            <label for="name" style={{'marginBottom': '7px', 'fontSize': '19px', 'display': 'block'}}>User name: </label>
             <input
               id="name"
               type="text"
+              size="25"
               placeholder='Enter a user name'
               onChange={this.updateUsername}
-              style={{'color': 'black'}}
+              style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/>
-            <label htmlFor="name" style={{'marginBottom': '7px'}}>Password: </label>
+            <label for="password" style={{'marginBottom': '7px', 'fontSize': '19px', 'display': 'block'}}>Password: </label>
             <input
-              id="name"
-              type="text"
+              id="password"
+              type="password"
+              size="25"
               placeholder='Enter a password'
               onChange={this.updatePassword}
-              style={{'color': 'black'}}
+              style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/>
             <Button

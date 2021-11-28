@@ -24,7 +24,7 @@
 }
 
 .button {
-  margin-top: 50px;
+  margin-top: 40px;
   background-color: #f1f6db;
   color: #de8e48;
   padding: 15px 20px;
@@ -50,7 +50,6 @@ form h3 {
 }
 
 label {
-  display: block;
   margin-top: 30px;
   font-size: 18px;
   font-weight: 500;

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import Demo from "./profile/profile";
 import Flight from "./flights/flight";
+import Registration from "./profile/registration";
 import './App.css';
 
 const Navigation = () => {
@@ -38,6 +39,9 @@ export default function App() {
           </Route>
           <Route path="/profile">
             <Demo />
+          </Route>
+          <Route path="/registration">
+            <Registration />
           </Route>
           <Route path="/">
             <Home />
