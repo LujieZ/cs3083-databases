@@ -126,21 +126,16 @@ class Registration extends Component {
         console.log('ERROR! Please check your log in information!!');
         return;
       }
-      axios.get(`/customer/${curState.username}`).then((res1) => {
-        if (res1.data.length === 0) {
-          axios.get(`/staff/${curState.username}`).then((res2) => {
-            if (res2.data.length === 0) {
-              console.log('ERROR! Please check your log in information!!');
-            } else {
-              console.log(res2.data);
-              if (curState.password === res2.data[0].password) {
-                localStorage.setItem('user', res2.data[0]);
-                localStorage.setItem('userType', 'staff');
-                window.location.reload(false);
-              }
-            }
-          })
-        }
+      const obj = {
+          username: curState.username,
+          password: curState.password,
+          airline_name: curState.airline,
+          first_name: curState.firstname,
+          last_name: curState.lastname,
+          date_of_birth: curState.birthday,
+          phone_num: curState.phone,
+      }
+      axios.post('/staff', qs.stringify(obj), config).then(() => {
       })
     }
 

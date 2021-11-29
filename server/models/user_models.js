@@ -20,6 +20,7 @@ const Staff = function createStaff(staff) {
     this.password = staff.password;
     this.airline_name = staff.airline_name;
     this.first_name = staff.first_name;
+    this.last_name = staff.last_name;
     this.date_of_birth = staff.date_of_birth;
     this.phone_num = staff.phone_num;
 }
@@ -61,6 +62,22 @@ Customer.create = (customer, result) => {
     }
 
     console.log('Customer: ', res);
+    result(null, res);
+  },
+);
+};
+
+Staff.create = (staff, result) => {
+  sql.query('INSERT INTO Airline_Staff SET username=?, first_name=?, last_name=?, password=?, date_of_birth=?, airline_name=?, phone_num=?',
+  [staff.username, staff.first_name, staff.last_name, staff.password, staff.date_of_birth, staff.airline_name, staff.phone_num],
+  (err, res) => {
+    if (err) {
+      console.log('error: ', err);
+      result(null, err);
+      return;
+    }
+
+    console.log('Staff: ', res);
     result(null, res);
   },
 );

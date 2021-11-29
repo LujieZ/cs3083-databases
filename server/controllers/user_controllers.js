@@ -51,7 +51,37 @@ exports.createCustomer = (req, res) => {
     Customer.create(customer, (err, data) => {
       if (err) {
         res.status(500).send({
-          message: err.message || 'Some error occurred while creating the new SLDP Kit.',
+          message: err.message || 'Some error occurred while creating new customer.',
+        });
+      } else res.send(data);
+    });
+  };
+
+  exports.createStaff = (req, res) => {
+    // Validate request
+    console.log('request', req.body);
+    if (_.isEmpty(req.body)) {
+      res.status(400).send({
+        message: 'Content can not be empty!',
+      });
+      return;
+    }
+
+    const staff = new Staff({
+      username: req.body.username,
+      password: req.body.password,
+      airline_name: req.body.airline_name,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      date_of_birth: req.body.date_of_birth,
+      phone_num: req.body.phone_num,
+    });
+    console.log(staff);
+
+    Staff.create(staff, (err, data) => {
+      if (err) {
+        res.status(500).send({
+          message: err.message || 'Some error occurred while creating new airline staff',
         });
       } else res.send(data);
     });

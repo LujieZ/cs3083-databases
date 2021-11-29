@@ -6,4 +6,6 @@ module.exports = (app) => {
     app.get('/staff/:username', user.getStaffInfo);
 
     app.post('/customer', user.createCustomer);
+
+    app.post('/staff', user.createStaff);
 }
