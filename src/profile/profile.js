@@ -65,26 +65,62 @@ class Profile extends Component {
     const loggedInUser = localStorage.getItem('userType');
     if (loggedInUser) {
       console.log(loggedInUser);
+      if (loggedInUser === 'customer') {
+        return (
+          <div style={{'color': '#ffffff'}}>
+          <p>You are logged in as {loggedInUser}</p>
+          <Link to='/'>
+          <Button className='button'>View My Flights</Button>
+          </Link>
+          <br/>
+          <Link to='/'>
+          <Button className='button'>Rate Previous Flights</Button>
+          </Link>
+          <br/>
+          <Link to='/'>
+          <Button className='button'>Track My Spending</Button>
+          </Link>
+          <br/>
+          <Button
+                varient='primary'
+                onClick={() => {
+                  localStorage.clear();
+                  window.location.reload(false);
+                }}
+                className='button'>
+                  Log Out
+                </Button>
+          </div>
+        )
+      }
       return (
         <div style={{'color': '#ffffff'}}>
         <p>You are logged in as {loggedInUser}</p>
         <Link to='/'>
-        <Button className='button'>View My Flights</Button>
+        <Button className='button'>View Flights Information</Button>
         </Link>
         <br/>
         <Link to='/'>
-        <Button className='button'>Track My Spending</Button>
+        <Button className='button'>View Tickets Information</Button>
+        </Link>
+        <br/>
+        <Link to='/'>
+        <Button className='button'>View Airline Information</Button>
+        </Link>
+        <br/>
+        <Link to='/'>
+        <Button className='button'>Manage Flights</Button>
         </Link>
         <br/>
         <Button
-              varient='primary'
-              onClick={() => {
-                localStorage.clear();
-                window.location.reload(false);
-              }}
-              className='button'>
-                Log Out
-              </Button>
+                varient='primary'
+                onClick={() => {
+                  localStorage.clear();
+                  window.location.reload(false);
+                }}
+                className='button'>
+                  Log Out
+                </Button>
         </div>
       )
     }
