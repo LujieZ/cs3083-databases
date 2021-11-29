@@ -66,8 +66,16 @@ class Profile extends Component {
     if (loggedInUser) {
       console.log(loggedInUser);
       return (
-        <>
-        <p style={{'color': 'white'}}>You are logged in as {loggedInUser}</p>
+        <div style={{'color': '#ffffff'}}>
+        <p>You are logged in as {loggedInUser}</p>
+        <Link to='/'>
+        <Button className='button'>View My Flights</Button>
+        </Link>
+        <br/>
+        <Link to='/'>
+        <Button className='button'>Track My Spending</Button>
+        </Link>
+        <br/>
         <Button
               varient='primary'
               onClick={() => {
@@ -77,7 +85,7 @@ class Profile extends Component {
               className='button'>
                 Log Out
               </Button>
-        </>
+        </div>
       )
     }
     return (

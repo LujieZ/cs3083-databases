@@ -1,0 +1,32 @@
+.button {
+    margin-top: 40px;
+    background-color: #f1f6db;
+    color: #de8e48;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  form * {
+    font-family: 'Poppins',sans-serif;
+    color: white;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+  }
+  
+  form h3 {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 42px;
+    text-align: center;
+  }
+  
+  label {
+    margin-top: 30px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  

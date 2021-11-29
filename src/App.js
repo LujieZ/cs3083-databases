@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import Demo from "./profile/profile";
 import Flight from "./flights/flight";
+import Status from "./flights/status";
 import Registration from "./profile/registration";
 import './App.css';
 
@@ -14,7 +15,7 @@ const Navigation = () => {
             <Nav className='me-auto'>
               <Nav.Link href='/'>Home</Nav.Link>
               <Nav.Link href='/about'>About</Nav.Link>
-              <Nav.Link href='/flights'>Flights</Nav.Link>
+              <Nav.Link href='/status'>Flight Status</Nav.Link>
               <div className='topnav-right'>
                 <Nav.Link href='/profile'>My Account</Nav.Link>
               </div>
@@ -37,6 +38,9 @@ export default function App() {
           <Route path="/flights">
             <Flight />
           </Route>
+          <Route path="/status">
+            <Status />
+          </Route>
           <Route path="/profile">
             <Demo />
           </Route>
@@ -53,9 +57,17 @@ export default function App() {
 }
 
 function Home() {
-  return <h2 style={{'color': '#ffffff'}}>CS-UY 3083 Final Project</h2>;
+  return (
+    <div style={{'color': '#ffffff'}}>
+    <Flight />
+    </div>
+  );
 }
 
 function About() {
-  return <h2 style={{'color': '#ffffff'}}>About</h2>;
+  return (
+    <div style={{'color': '#ffffff'}}>
+      <h2>CS-UY 3083 Final Project</h2>
+    </div>
+  );
 }
