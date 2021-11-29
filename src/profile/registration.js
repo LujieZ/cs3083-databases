@@ -9,6 +9,7 @@ const config = {
     },
   };
 const qs = require('querystring');
+const md5 = require('md5');
 
 class Registration extends Component {
     constructor(props) {
@@ -128,7 +129,7 @@ class Registration extends Component {
       }
       const obj = {
           username: curState.username,
-          password: curState.password,
+          password: md5(curState.password),
           airline_name: curState.airline,
           first_name: curState.firstname,
           last_name: curState.lastname,
@@ -150,7 +151,7 @@ class Registration extends Component {
         const obj = {
             name: curState.fullname,
             customer_email: curState.username,
-            password: curState.password,
+            password: md5(curState.password),
             building_number: curState.building,
             street: curState.street,
             city: curState.city,
@@ -251,7 +252,7 @@ class Registration extends Component {
               style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/><br/>
-            <label for="airline" style={{'marginBottom': '7px'}}>State: </label>
+            <label for="state" style={{'marginBottom': '7px'}}>State: </label>
             <input
               id="state"
               type="text"
@@ -261,9 +262,9 @@ class Registration extends Component {
               style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/><br/>
-            <label for="airline" style={{'marginBottom': '7px'}}>Passport Number: </label>
+            <label for="passport-number" style={{'marginBottom': '7px'}}>Passport Number: </label>
             <input
-              id="state"
+              id="passport-number"
               type="text"
               size="25"
               placeholder='Enter your passport number'
@@ -271,9 +272,9 @@ class Registration extends Component {
               style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/><br/>
-            <label for="airline" style={{'marginBottom': '7px'}}>Passport Country: </label>
+            <label for="passport-country" style={{'marginBottom': '7px'}}>Passport Country: </label>
             <input
-              id="state"
+              id="passport-country"
               type="text"
               size="25"
               placeholder='Enter your passport country'
@@ -281,9 +282,9 @@ class Registration extends Component {
               style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/><br/>
-            <label for="airline" style={{'marginBottom': '7px'}}>Passport Expiration Date: </label>
+            <label for="passport-expiration" style={{'marginBottom': '7px'}}>Passport Expiration Date: </label>
             <input
-              id="state"
+              id="passport-expiration"
               type="text"
               size="25"
               placeholder='Enter your passport expiration date'

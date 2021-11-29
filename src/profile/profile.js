@@ -4,6 +4,8 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './profile.css';
 
+const md5 = require('md5');
+
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -34,22 +36,27 @@ class Profile extends Component {
         axios.get(`/staff/${curState.username}`).then((res2) => {
           if (res2.data.length === 0) {
             console.log('ERROR! Please check your log in information!!');
+            return;
           } else {
             console.log(res2.data);
-            if (curState.password === res2.data[0].password) {
-              localStorage.setItem('user', res2.data[0]);
-              localStorage.setItem('userType', 'staff');
-              window.location.reload(false);
+            if (md5(curState.password) !== res2.data[0].password) {
+              console.log('ERROR! Please check your password!!');
+              return;
             }
+            localStorage.setItem('user', res2.data[0]);
+            localStorage.setItem('userType', 'staff');
+            window.location.reload(false);
           }
         })
       } else {
         console.log(res1.data);
-        if (curState.password === res1.data[0].password) {
+        if (md5(curState.password) !== res1.data[0].password) {
+          console.log('ERROR! Please check your password!!');
+          return;
+        }
           localStorage.setItem('user', res1.data[0]);
           localStorage.setItem('userType', 'customer');
           window.location.reload(false);
-        }
       }
     })
   }
