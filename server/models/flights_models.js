@@ -27,6 +27,20 @@ sql.query('SELECT * FROM Flight', (err, res) => {
       console.log('Flights ', res);
       result(null, res);
     });
-  };
+};
+
+Flight.getFlightStatus = (airline_name, flight_number, departure_date, arrival_date, result) => {
+  sql.query('SELECT * FROM Flight WHERE airline_name=? AND flight_num=? AND departure_date=? AND arrival_date=?', 
+  [airline_name, flight_number, departure_date, arrival_date], (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Flights ', res);
+      result(null, res);
+    });
+};
 
 module.exports = { Flight };

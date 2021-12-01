@@ -108,8 +108,8 @@ class Profile extends Component {
         <Button className='button'>View Airline Information</Button>
         </Link>
         <br/>
-        <Link to='/'>
-        <Button className='button'>Manage Flights</Button>
+        <Link to='/management'>
+        <Button className='button'>Manage Flights/Airplanes/Airport</Button>
         </Link>
         <br/>
         <Button

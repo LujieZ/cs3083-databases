@@ -11,3 +11,13 @@ exports.showAllFlights = (req, res) => {
       else res.send(data);
     });
 };
+
+exports.findFlightStatus = (req, res) => {
+    Flight.getFlightStatus(req.params.airline_name, req.params.flight_num, req.params.departure_date, req.params.arrival_date, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occurred while finding flight status.',
+      });
+    else res.send(data);
+  });
+};

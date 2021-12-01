@@ -29,4 +29,30 @@
     font-size: 18px;
     font-weight: 500;
   }
+
+  #flights table {
+    font-family: 'Poppins',sans-serif;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+    text-align: center;
+  }
+
+  #flights td, #flights th {
+    border: 1px solid #ffffff;
+    padding: 8px;
+  }
+
+  #flights tr:nth-child(even){background-color: #f2f2f2;}
+
+  #flights tr:hover {background-color: #ddd;}
+
+  #flights th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #563727;
+  color: white;
+  } tr:nth-child(even){background-color: #f2f2f2;}
+
   
