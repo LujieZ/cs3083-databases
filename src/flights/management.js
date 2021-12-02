@@ -16,6 +16,15 @@ export default class Management extends Component {
         this.state = {
           airplanes: [],
           airports: [],
+          newFlightNumber: '',
+          newFlightAirplane: '',
+          newFlightDepartureDate: '',
+          newFlightDepartureTime: '',
+          newFlightDepartureAirport: '',
+          newFlightArrivalDate: '',
+          newFlightArrivalTime: '',
+          newFlightArrivalAirport: '',
+          newFlightBasePrice: '',
           newAirplaneId: '',
           newAirplaneNumSeats: '',
           newAirportId: '',
@@ -41,6 +50,59 @@ export default class Management extends Component {
             this.setState({
                 airports: res.data,
             });
+        });
+    }
+    updateNewFlightNumber = (e) => {
+        this.setState({
+            newFlightNumber: e.target.value,
+        });
+    }
+
+    updateNewFlightAirplane = (e) => {
+        this.setState({
+            newFlightAirplane: e.target.value,
+        })
+    }
+
+    updateNewFlightDepartureAirport = (e) => {
+        this.setState({
+            newFlightDepartureAirport: e.target.value,
+        });
+    }
+
+    updateNewFlightDepartureDate = (e) => {
+        this.setState({
+            newFlightDepartureDate: e.target.value,
+        });
+    }
+
+    updateNewFlightDepartureTime = (e) => {
+        this.setState({
+            newFlightDepartureTime: e.target.value,
+        });
+    }
+
+    updateNewFlightArrivalAirport = (e) => {
+        this.setState({
+            newFlightArrivalAirport: e.target.value,
+        });
+    }
+
+    updateNewFlightArrivalDate = (e) => {
+        this.setState({
+            newFlightArrivalDate: e.target.value,
+        });
+    }
+
+    updateNewFlightArrivalTime = (e) => {
+        this.setState({
+            newFlightArrivalTime: e.target.value,
+        });
+    }
+
+    updateNewBasePrice = (e) => {
+        this.setState({
+            newFlightBasePrice: e.target.value,
         });
     }
 
@@ -94,6 +156,31 @@ export default class Management extends Component {
         });
     }
 
+    addNewFlight = (staff_airline_name) => {
+        const curState = this.state;
+        if (curState.newFlightAirplane === '' || curState.newFlightBasePrice === '' || curState.newFlightDepartureAirport === '' || curState.newFlightDepartureDate === ''
+        || curState.newFlightArrivalAirport === '' || curState.newFlightArrivalDate === '' || curState.newFlightArrivalTime === '' || curState.newFlightNumber === ''
+        || curState.newFlightDepartureTime === '') {
+            console.log('ERROR! Please check your inputs!!');
+            return;
+        }
+        const flight = {
+            flight_number: curState.newFlightNumber,
+            airline_name: staff_airline_name,
+            airplane_id: curState.newFlightAirplane,
+            departure_date: curState.newFlightDepartureDate,
+            departure_time: curState.newFlightDepartureTime,
+            departure_airport: curState.newFlightDepartureAirport,
+            arrival_date: curState.newFlightArrivalDate,
+            arrival_time: curState.newFlightArrivalTime,
+            arrival_airport: curState.newFlightArrivalAirport,
+            base_price: curState.newFlightBasePrice,
+        }
+        axios.post('/flight', qs.stringify(flight), config).then(() => {
+          this.componentDidMount();
+        });
+    }
+
     render() {
         if (localStorage.getItem('userType') !== 'staff') {
             return <h3 style={{'color': '#ffffff'}}>Sorry. You have no permission to view the page.</h3>
@@ -122,6 +209,154 @@ export default class Management extends Component {
         return (
             <div style={{'color': '#ffffff', 'marginBottom': '70px'}}>
             <h3 style={{'fontSize': '25px', 'marginBottom': '50px'}}>Flights Management</h3>
+            <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Add a Flight</p>
+            <form>
+            <label for="flight-id" style={{'marginBottom': '7px'}}>Flight Number: </label>
+            <input
+              id="flight-id"
+              type="text"
+              size="25"
+              placeholder='New Flight Number'
+              onChange={this.updateNewFlightNumber}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="plane-id" style={{'marginBottom': '7px'}}>Airplane ID: </label>
+            <input
+              id="plane-id"
+              type="text"
+              size="25"
+              placeholder='Airplane ID'
+              onChange={this.updateNewFlightAirplane}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="departure-date" style={{'marginBottom': '7px'}}>Departure Date: </label>
+            <input
+              id="departure-date"
+              type="text"
+              size="25"
+              placeholder='Depature Date'
+              onChange={this.updateNewFlightDepartureDate}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="plane-id" style={{'marginBottom': '7px'}}>Departure Time: </label>
+            <input
+              id="plane-id"
+              type="text"
+              size="25"
+              placeholder='Departure Time'
+              onChange={this.updateNewFlightDepartureTime}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="plane-id" style={{'marginBottom': '7px'}}>Departure Airport: </label>
+            <input
+              id="plane-id"
+              type="text"
+              size="25"
+              placeholder='Departure Airport'
+              onChange={this.updateNewFlightDepartureAirport}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="num-seats" style={{'marginBottom': '7px'}}>Arrival Date: </label>
+            <input
+              id="num-seats"
+              type="text"
+              size="25"
+              placeholder='Arrival Date'
+              onChange={this.updateNewFlightArrivalDate}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="plane-id" style={{'marginBottom': '7px'}}>Arrival Time: </label>
+            <input
+              id="plane-id"
+              type="text"
+              size="25"
+              placeholder='Arrival Time'
+              onChange={this.updateNewFlightArrivalTime}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="plane-id" style={{'marginBottom': '7px'}}>Arrival Airport: </label>
+            <input
+              id="plane-id"
+              type="text"
+              size="25"
+              placeholder='Arrival Airport'
+              onChange={this.updateNewFlightArrivalAirport}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="plane-id" style={{'marginBottom': '7px'}}>Base Price: </label>
+            <input
+              id="plane-id"
+              type="text"
+              size="25"
+              placeholder='Base Price'
+              onChange={this.updateNewBasePrice}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/>
+            <Button
+              varient='primary'
+              onClick={() => this.addNewFlight(staffObj.airline_name)}
+              className='button'>
+                Add a Flight
+              </Button>
+            </form>
+            <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Update Flight Status</p>
+            <form>
+            <label for="flight-id" style={{'marginBottom': '7px'}}>Flight Number: </label>
+            <input
+              id="flight-id"
+              type="text"
+              size="25"
+              placeholder='Flight Number'
+              onChange={this.updateNewAirplaneId}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="departure-date" style={{'marginBottom': '7px'}}>Depature Date: </label>
+            <input
+              id="departure-date"
+              type="text"
+              size="25"
+              placeholder='Depature Date'
+              onChange={this.updateNewAirplaneId}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="depature-time" style={{'marginBottom': '7px'}}>Departure Time: </label>
+            <input
+              id="departure-time"
+              type="text"
+              size="25"
+              placeholder='Departure Time'
+              onChange={this.updateNewAirplaneId}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="status" style={{'marginBottom': '7px'}}>New Status: </label>
+            <input
+              id="status"
+              type="text"
+              size="25"
+              placeholder='New Status'
+              onChange={this.updateNewAirplaneId}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/>
+            <Button
+              varient='primary'
+              onClick={() => this.addNewFlight(staffObj.airline_name)}
+              className='button'>
+                Add a Flight
+              </Button>
+            </form>
             <h3 style={{'fontSize': '25px', 'marginBottom': '15px'}}>Airplanes Management</h3>
             <table id="flights" style={{'color': '#372c2e', 'marginBottom': '15px', 'margin-left':'auto', 'margin-right':'auto'}}>
                 <tr>

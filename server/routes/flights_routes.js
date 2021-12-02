@@ -9,6 +9,8 @@ module.exports = (app) => {
 
     app.get('/airports', flights.showAllAirports);
 
+    app.post('/flight', flights.createNewFlight);
+    
     app.post('/airplane/:id/:airline_name/:num_seats/', flights.createNewAirplane);
 
     app.post('/airports/:id/:airport_name/:airport_city/', flights.createNewAirport);

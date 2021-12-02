@@ -69,6 +69,20 @@ Flight.getAllAirplanes = (airline_name, result) => {
     });
 };
 
+Flight.addNewFlight = (flight, result) => {
+  sql.query("INSERT INTO Flight SET flight_num=?, airline_name=?, airplane_id=?, departure_date=?, departure_time=?, depart_airport=?, arrival_date=?, arrival_time=?, arrival_airport=?, base_price=?, status='ONTIME', avg_rating=0.00, num_of_tickets_booked=0",
+  [flight.flight_number, flight.airline_name, flight.airplane_id, flight.departure_date, flight.departure_time, flight.departure_airport, flight.arrival_date, flight.arrival_time, flight.arrival_airport, flight.base_price], (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Airplanes: ', res);
+      result(null, res);
+    });
+};
+
 Flight.addNewAirplane = (id, airline_name, num_seats, result) => {
   sql.query('INSERT INTO Airplane SET airplane_id=?, airline_name=?, num_seats=?',
   [id, airline_name, num_seats], (err, res) => {

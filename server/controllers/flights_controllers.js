@@ -42,6 +42,29 @@ exports.showAllAirports = (req, res) => {
     });
 };
 
+exports.createNewFlight = (req, res) => {
+  const flight = new Flight({
+    flight_number: req.body.flight_number,
+    airline_name: req.body.airline_name,
+    airplane_id: req.body.airplane_id,
+    departure_date: req.body.departure_date,
+    departure_time: req.body.departure_time,
+    departure_airport: req.body.departure_airport,
+    arrival_date: req.body.arrival_date,
+    arrival_time: req.body.arrival_time,
+    arrival_airport: req.body.arrival_airport,
+    base_price: req.body.base_price,
+  });
+
+  Flight.addNewFlight(flight, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occurred while adding new flight.',
+      });
+    else res.send(data);
+  });
+}
+
 exports.createNewAirplane = (req, res) => {
   Flight.addNewAirplane(req.params.id, req.params.airline_name, req.params.num_seats, (err, data) => {
     if (err)

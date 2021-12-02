@@ -6,6 +6,7 @@ import Flight from "./flights/flight";
 import Status from "./flights/status";
 import Registration from "./profile/registration";
 import Management from "./flights/management";
+import MyFlights from "./flights/myFlights";
 import './App.css';
 
 const Navigation = () => {
@@ -50,6 +51,9 @@ export default function App() {
           </Route>
           <Route path="/management">
             <Management />
+          </Route>
+          <Route path="/my-flights">
+            <MyFlights />
           </Route>
           <Route path="/">
             <Home />
