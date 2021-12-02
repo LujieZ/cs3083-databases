@@ -43,7 +43,7 @@
     padding: 8px;
   }
 
-  #flights tr:nth-child(even){background-color: #f2f2f2;}
+  #flights tr {background-color: #f2f2f2;}
 
   #flights tr:hover {background-color: #ddd;}
 
@@ -53,6 +53,6 @@
   text-align: center;
   background-color: #563727;
   color: white;
-  } tr:nth-child(even){background-color: #f2f2f2;}
+  }
 
   

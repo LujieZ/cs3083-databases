@@ -21,3 +21,43 @@ exports.findFlightStatus = (req, res) => {
     else res.send(data);
   });
 };
+
+exports.findAllAirplanes = (req, res) => {
+  Flight.getAllAirplanes(req.params.airline_name, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occurred while finding all airplanes.',
+      });
+    else res.send(data);
+  });
+};
+
+exports.showAllAirports = (req, res) => {
+  Flight.displayAllAirports((err, data) => {
+    if (err)
+        res.status(500).send({
+          message: err.message || 'Some error occurred while showing all airports.',
+        });
+      else res.send(data);
+    });
+};
+
+exports.createNewAirplane = (req, res) => {
+  Flight.addNewAirplane(req.params.id, req.params.airline_name, req.params.num_seats, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occurred while adding new airplane.',
+      });
+    else res.send(data);
+  });
+};
+
+exports.createNewAirport = (req, res) => {
+  Flight.addNewAirport(req.params.id, req.params.airport_name, req.params.airport_city, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occurred while adding new airport.',
+      });
+    else res.send(data);
+  });
+};

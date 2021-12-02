@@ -43,7 +43,7 @@ class Profile extends Component {
               console.log('ERROR! Please check your password!!');
               return;
             }
-            localStorage.setItem('user', res2.data[0]);
+            localStorage.setItem('user', JSON.stringify(res2.data[0]));
             localStorage.setItem('userType', 'staff');
             window.location.reload(false);
           }
@@ -54,7 +54,7 @@ class Profile extends Component {
           console.log('ERROR! Please check your password!!');
           return;
         }
-          localStorage.setItem('user', res1.data[0]);
+          localStorage.setItem('user', JSON.stringify(res1.data[0]));
           localStorage.setItem('userType', 'customer');
           window.location.reload(false);
       }

@@ -24,7 +24,20 @@ sql.query('SELECT * FROM Flight', (err, res) => {
         return;
       }
 
-      console.log('Flights ', res);
+      console.log('Flights: ', res);
+      result(null, res);
+    });
+};
+
+Flight.displayAllAirports = (result) => {
+  sql.query('SELECT * FROM Airport', (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Airports: ', res);
       result(null, res);
     });
 };
@@ -38,7 +51,48 @@ Flight.getFlightStatus = (airline_name, flight_number, departure_date, arrival_d
         return;
       }
 
-      console.log('Flights ', res);
+      console.log('Flights: ', res);
+      result(null, res);
+    });
+};
+
+Flight.getAllAirplanes = (airline_name, result) => {
+  sql.query('SELECT * FROM Airplane WHERE airline_name=?', airline_name, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Airplanes: ', res);
+      result(null, res);
+    });
+};
+
+Flight.addNewAirplane = (id, airline_name, num_seats, result) => {
+  sql.query('INSERT INTO Airplane SET airplane_id=?, airline_name=?, num_seats=?',
+  [id, airline_name, num_seats], (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Airplanes: ', res);
+      result(null, res);
+    });
+};
+
+Flight.addNewAirport = (id, airport_name, airport_city, result) => {
+  sql.query('INSERT INTO Airport SET airport_id=?, name=?, city=?',
+  [id, airport_name, airport_city], (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Airports: ', res);
       result(null, res);
     });
 };
