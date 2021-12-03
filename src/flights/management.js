@@ -14,6 +14,7 @@ export default class Management extends Component {
     constructor(props) {
         super(props);
         this.state = {
+          flights: [],
           airplanes: [],
           airports: [],
           newFlightNumber: '',
@@ -25,6 +26,10 @@ export default class Management extends Component {
           newFlightArrivalTime: '',
           newFlightArrivalAirport: '',
           newFlightBasePrice: '',
+          updateFlightNum: '',
+          updateFlightDepatureDate: '',
+          updateFlightDepatureTime: '',
+          updateStatus: '',
           newAirplaneId: '',
           newAirplaneNumSeats: '',
           newAirportId: '',
@@ -39,6 +44,12 @@ export default class Management extends Component {
         }
         const staff = localStorage.getItem('user');
         const staffObj = JSON.parse(staff);
+        axios.get(`/flights-30/${staffObj.airline_name}`).then((res) => {
+          console.log(res.data);
+          this.setState({
+              flights: res.data,
+          });
+        });
         axios.get(`/airplanes/${staffObj.airline_name}`).then((res) => {
             console.log(res.data);
             this.setState({
@@ -136,6 +147,30 @@ export default class Management extends Component {
         });
     }
 
+    changeFlightNum = (e) => {
+      this.setState({
+        updateFlightNum: e.target.value,
+      });
+    }
+  
+    changeFlightStatus = (e) => {
+      this.setState({
+        updateStatus: e.target.value,
+      });
+    } 
+
+    changeFlightDepatureDate = (e) => {
+      this.setState({
+        updateFlightDepatureDate: e.target.value,
+      });
+    }
+  
+    changeFlightDepatureTime = (e) => {
+      this.setState({
+        updateFlightDepatureTime: e.target.value,
+      });
+    }
+
     addAirplane = (airline_name) => {
         const curState = this.state;
         if (curState.newAirplaneId === '' || curState.newAirplaneNumSeats === '') {
@@ -181,6 +216,17 @@ export default class Management extends Component {
         });
     }
 
+    updateFlightStatus = () => {
+      const curState = this.state;
+      if (curState.updateFlightNum === '' || curState.updateFlightDepatureDate === '' || curState.updateFlightDepatureTime === '' || curState.updateStatus === '') {
+        console.log('ERROR! Please check your inputs!!');
+        return;
+      }
+      axios.put(`/flight-status/${curState.updateFlightNum}/${curState.updateFlightDepatureDate}/${curState.updateFlightDepatureTime}/${curState.updateStatus}`).then(() => {
+        window.location.reload(false);
+      });
+    }
+
     render() {
         if (localStorage.getItem('userType') !== 'staff') {
             return <h3 style={{'color': '#ffffff'}}>Sorry. You have no permission to view the page.</h3>
@@ -188,6 +234,19 @@ export default class Management extends Component {
         const curState = this.state;
         const staff = localStorage.getItem('user');
         const staffObj = JSON.parse(staff);
+        const flightTrs = curState.flights.map((flight) => {
+          return (
+            <tr>
+            <td>{flight.flight_num}</td>
+            <td>{flight.airline_name}</td>
+            <td>{flight.airplane_id}</td>
+            <td>{flight.departure_date} {flight.departure_time}</td>
+            <td>{flight.arrival_date} {flight.arrival_time}</td>
+            <td>{flight.base_price}</td>
+            <td>{flight.status}</td>
+          </tr>
+          )
+        })
         const airplaneTrs = curState.airplanes.map((airplane) => {
             return (
               <tr>
@@ -210,6 +269,18 @@ export default class Management extends Component {
             <div style={{'color': '#ffffff', 'marginBottom': '70px'}}>
             <h3 style={{'fontSize': '25px', 'marginBottom': '50px'}}>Flights Management</h3>
             <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Add a Flight</p>
+            <table id="flights" style={{'color': '#372c2e', 'marginBottom': '15px', 'margin-left':'auto', 'margin-right':'auto'}}>
+                <tr>
+                    <th>Flight Number</th>
+                    <th>Airline Name</th>
+                    <th>Airplane ID</th>
+                    <th>Departure</th>
+                    <th>Arrival</th>
+                    <th>Base Price</th>
+                    <th>Status</th>
+                </tr>
+                    {flightTrs}
+            </table>
             <form>
             <label for="flight-id" style={{'marginBottom': '7px'}}>Flight Number: </label>
             <input
@@ -316,7 +387,7 @@ export default class Management extends Component {
               type="text"
               size="25"
               placeholder='Flight Number'
-              onChange={this.updateNewAirplaneId}
+              onChange={this.changeFlightNum}
               style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/><br/>
@@ -326,7 +397,7 @@ export default class Management extends Component {
               type="text"
               size="25"
               placeholder='Depature Date'
-              onChange={this.updateNewAirplaneId}
+              onChange={this.changeFlightDepatureDate}
               style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/><br/>
@@ -336,7 +407,7 @@ export default class Management extends Component {
               type="text"
               size="25"
               placeholder='Departure Time'
-              onChange={this.updateNewAirplaneId}
+              onChange={this.changeFlightDepatureTime}
               style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/><br/>
@@ -346,13 +417,13 @@ export default class Management extends Component {
               type="text"
               size="25"
               placeholder='New Status'
-              onChange={this.updateNewAirplaneId}
+              onChange={this.changeFlightStatus}
               style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/>
             <Button
               varient='primary'
-              onClick={() => this.addNewFlight(staffObj.airline_name)}
+              onClick={() => this.updateFlightStatus()}
               className='button'>
                 Add a Flight
               </Button>

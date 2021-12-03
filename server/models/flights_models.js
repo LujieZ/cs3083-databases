@@ -42,6 +42,20 @@ Flight.displayAllAirports = (result) => {
     });
 };
 
+Flight.get30DaysFlights = (airline_name, result) => {
+  sql.query('SELECT * FROM Flight WHERE airline_name=? AND departure_date BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)',
+  airline_name, (err, res) => {
+    if (err) {
+      console.log('error: ', err);
+      result(null, err);
+      return;
+    }
+
+    console.log('Flights: ', res);
+    result(null, res);
+  });
+};
+
 Flight.getFlightStatus = (airline_name, flight_number, departure_date, arrival_date, result) => {
   sql.query('SELECT * FROM Flight WHERE airline_name=? AND flight_num=? AND departure_date=? AND arrival_date=?', 
   [airline_name, flight_number, departure_date, arrival_date], (err, res) => {
@@ -58,6 +72,20 @@ Flight.getFlightStatus = (airline_name, flight_number, departure_date, arrival_d
 
 Flight.getAllAirplanes = (airline_name, result) => {
   sql.query('SELECT * FROM Airplane WHERE airline_name=?', airline_name, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Airplanes: ', res);
+      result(null, res);
+    });
+};
+
+Flight.changeFlightStatus = (flight_num, departure_date, departure_time, status, result) => {
+  sql.query("UPDATE Flight SET status=? WHERE flight_num = ? AND departure_date=? AND departure_time=?",
+  [status, flight_num, departure_date, departure_time], (err, res) => {
     if (err) {
         console.log('error: ', err);
         result(null, err);

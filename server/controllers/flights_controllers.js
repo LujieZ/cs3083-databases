@@ -12,6 +12,16 @@ exports.showAllFlights = (req, res) => {
     });
 };
 
+exports.find30DaysFlights = (req, res) => {
+  Flight.get30DaysFlights(req.params.airline_name, (err, data) => {
+    if (err)
+        res.status(500).send({
+          message: err.message || 'Some error occurred while getting flights within 30 days.',
+        });
+      else res.send(data);
+    });
+};
+
 exports.findFlightStatus = (req, res) => {
     Flight.getFlightStatus(req.params.airline_name, req.params.flight_num, req.params.departure_date, req.params.arrival_date, (err, data) => {
     if (err)
@@ -60,6 +70,16 @@ exports.createNewFlight = (req, res) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Some error occurred while adding new flight.',
+      });
+    else res.send(data);
+  });
+}
+
+exports.updateFlightStatus = (req, res) => {
+  Flight.changeFlightStatus(req.params.flight_num, req.params.departure_date, req.params.departure_time, req.params.status, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occurred while changing flight status.',
       });
     else res.send(data);
   });
