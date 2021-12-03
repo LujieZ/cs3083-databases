@@ -69,6 +69,63 @@ Flight.getAllAirplanes = (airline_name, result) => {
     });
 };
 
+Flight.displayCustomerFlights = (customer_email, result) => {
+  sql.query('SELECT ticket_id, flight_num, airline_name, departure_date, departure_time, \
+  dep.name AS depart_airport_name, dep.city AS depart_city, arrival_date, arrival_time, \
+  arr.name AS arrival_airport_name, arr.city as arrival_city, status \
+  FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket \
+  WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND \
+  (departure_date > CURRENT_DATE() OR (departure_date = CURRENT_DATE() AND departure_time > CURRENT_TIME())) AND customer_email=?',
+  customer_email, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Flights: ', res);
+      result(null, res);
+    });
+};
+
+Flight.getFlightsOneWay = (depart_name, depart_date, arrival_name, result) => {
+  sql.query('SELECT flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, \
+  dep.city AS depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city \
+  FROM (Flight, Airport AS arr, Airport AS dep) WHERE Flight.depart_airport = dep.airport_id AND \
+  Flight.arrival_airport = arr.airport_id AND departure_date=? AND (dep.name=? OR dep.city=?) AND (arr.name=? OR arr.city=?)',
+  [depart_date, depart_name, depart_name, arrival_name, arrival_name], (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Flights: ', res);
+      result(null, res);
+    });
+};
+
+Flight.getFlightsReturn = (depart_name, depart_date, arrival_name, return_date, result) => {
+  sql.query('SELECT flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, \
+  dep.city AS depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city \
+  FROM (Flight, Airport AS arr, Airport AS dep) WHERE Flight.depart_airport = dep.airport_id AND \
+  Flight.arrival_airport = arr.airport_id AND departure_date=? AND (dep.name=? OR dep.city=?) AND (arr.name=? OR arr.city=?) \
+  UNION SELECT flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, \
+  dep.city AS depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city \
+  FROM (Flight, Airport AS arr, Airport AS dep) WHERE Flight.depart_airport = dep.airport_id AND \
+  Flight.arrival_airport = arr.airport_id AND departure_date=? AND (dep.name=? OR dep.city=?) AND (arr.name=? OR arr.city=?)',
+  [depart_date, depart_name, depart_name, arrival_name, arrival_name, return_date, arrival_name, arrival_name, depart_name, depart_name], (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Flights: ', res);
+      result(null, res);
+    });
+};
+
 Flight.addNewFlight = (flight, result) => {
   sql.query("INSERT INTO Flight SET flight_num=?, airline_name=?, airplane_id=?, departure_date=?, departure_time=?, depart_airport=?, arrival_date=?, arrival_time=?, arrival_airport=?, base_price=?, status='ONTIME', avg_rating=0.00, num_of_tickets_booked=0",
   [flight.flight_number, flight.airline_name, flight.airplane_id, flight.departure_date, flight.departure_time, flight.departure_airport, flight.arrival_date, flight.arrival_time, flight.arrival_airport, flight.base_price], (err, res) => {
