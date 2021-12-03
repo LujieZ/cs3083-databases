@@ -49,14 +49,14 @@ export default class Status extends Component {
     handleSearch = () => {
       const curState = this.state;
       if (curState.airline === '' || curState.flightNumber === '' || curState.departureDate === '' || curState.arrivalDate === '') {
-        console.log("ERROR! Please check your input again!!");
+        alert("ERROR! Please check your input again!!");
         return;
       }
 
       axios.get(`/flight-status/${curState.airline}/${curState.flightNumber}/${curState.departureDate}/${curState.arrivalDate}`).then((res) => {
         console.log(res.data);
         if (res.data.length === 0) {
-          console.log("ERROR! Cannot find any flight!");
+          alert("ERROR! Cannot find any flight!");
           return;
         }
         this.setState({

@@ -124,7 +124,7 @@ class Registration extends Component {
       }
       if (curState.username === '' || curState.password === '' || curState.firstname === '' || curState.lastname === ''
       || curState.birthday === '' || curState.phone === '' || curState.airline === '') {
-        console.log('ERROR! Please check your log in information!!');
+        alert('ERROR! Please check your log in information!!');
         return;
       }
       const obj = {
@@ -145,7 +145,7 @@ class Registration extends Component {
         if (curState.username === '' || curState.password === '' || curState.fullname === '' || curState.birthday === ''
         || curState.phone === '' || curState.password === '' || curState.buildind === '' || curState.street === '' || curState.city === ''
         || curState.state ==='' || curState.passportNumber === '' || curState.updatePassportExpir === '' || curState.updatePassportCountry === '') {
-            console.log('ERROR! Please check your log in information!!');
+            alert('ERROR! Please check your log in information!!');
             return;
         }
         const obj = {
