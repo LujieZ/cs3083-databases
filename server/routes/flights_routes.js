@@ -11,7 +11,7 @@ module.exports = (app) => {
 
     app.get('/airports', flights.showAllAirports);
     
-    app.get('/flights/:customer_email',flights.showCustomerFlights);
+    app.get('/flights/:customer_name',flights.showCustomerFlights);
 
     app.get('/flights-searched/:depart_name/:depart_date/:arrival_name', flights.searchFlightsOneWay);
 

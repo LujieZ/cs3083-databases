@@ -99,12 +99,7 @@ Flight.changeFlightStatus = (flight_num, departure_date, departure_time, status,
 };
 
 Flight.displayCustomerFlights = (customer_email, result) => {
-  sql.query('SELECT ticket_id, flight_num, airline_name, departure_date, departure_time, \
-  dep.name AS depart_airport_name, dep.city AS depart_city, arrival_date, arrival_time, \
-  arr.name AS arrival_airport_name, arr.city as arrival_city, status \
-  FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket \
-  WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND \
-  (departure_date > CURRENT_DATE() OR (departure_date = CURRENT_DATE() AND departure_time > CURRENT_TIME())) AND customer_email=?',
+  sql.query("SELECT ticket_id, flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND (departure_date > CURRENT_DATE() OR (departure_date = CURRENT_DATE() AND departure_time > CURRENT_TIME())) AND customer_email=?",
   customer_email, (err, res) => {
     if (err) {
         console.log('error: ', err);
@@ -118,7 +113,7 @@ Flight.displayCustomerFlights = (customer_email, result) => {
 };
 
 Flight.getFlightsOneWay = (depart_name, depart_date, arrival_name, result) => {
-  sql.query('SELECT flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, \
+  sql.query('SELECT flight_num, base_price, status, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, \
   dep.city AS depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city \
   FROM (Flight, Airport AS arr, Airport AS dep) WHERE Flight.depart_airport = dep.airport_id AND \
   Flight.arrival_airport = arr.airport_id AND departure_date=? AND (dep.name=? OR dep.city=?) AND (arr.name=? OR arr.city=?)',
