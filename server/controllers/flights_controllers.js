@@ -42,6 +42,37 @@ exports.showAllAirports = (req, res) => {
     });
 };
 
+exports.showCustomerFlights = (req, res) => {
+  Flight.displayCustomerFlights(req.params.customer_name, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while showing your flights.',
+    });
+  else res.send(data);
+});
+};
+
+exports.searchFlightsOneWay = (req, res) => {
+  Flight.getFlightsOneWay(req.params.depart_name,req.params.depart_date,req.params.arrival_name, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while searching for flights.',
+    });
+  else res.send(data);
+});
+};
+
+exports.searchFlightsReturn = (req, res) => {
+  Flight.getFlightsReturn(req.params.depart_name,req.params.depart_date,req.params.arrival_name, req.params.return_date, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while showing your flights.',
+    });
+  else res.send(data);
+});
+};
+
+
 exports.createNewFlight = (req, res) => {
   const flight = new Flight({
     flight_number: req.body.flight_number,
