@@ -10,6 +10,12 @@ module.exports = (app) => {
     app.get('/airplanes/:airline_name', flights.findAllAirplanes);
 
     app.get('/airports', flights.showAllAirports);
+    
+    app.get('/flights/:customer_email',flights.showCustomerFlights);
+
+    app.get('/flights-searched/:depart_name/:depart_date/:arrival_name', flights.searchFlightsOneWay);
+
+    app.get('/flights-searched/:depart_name/:depart_date/:arrival_name/:return_date', flights.searchFlightsReturn);
 
     app.put('/flight-status/:flight_num/:departure_date/:departure_time/:status', flights.updateFlightStatus);
 
