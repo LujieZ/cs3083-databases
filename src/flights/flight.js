@@ -85,7 +85,7 @@ export default class Flight extends Component {
     handleRoundTripsSearch = () => {
       const curState = this.state;
       if (curState.leftLocation === '' || curState.leftDate === '' || curState.arrivingDate === '' || curState.arrivingLocation === '') {
-        console.log("ERROR! Check your input again before search!");
+        alert("ERROR! Check your input again before search!");
       }
       const obj = {
         departure_date: curState.leftDate,
@@ -101,6 +101,19 @@ export default class Flight extends Component {
     }
     if (!curState.ifLeftAirport && curState.ifArrivingAirport) {
       
+    }
+    }
+    
+    handleOneWaySearch = () => {
+      const curState = this.state;
+      if (curState.leftLocation === '' || curState.leftDate === '' || curState.arrivingDate === '' || curState.arrivingLocation === '') {
+        alert("ERROR! Check your input again before search!");
+      }
+      const obj = {
+        departure_date: curState.leftDate,
+        departure_location: curState.leftLocation,
+        arrival_date: curState.arrivingDate,
+        arrival_location: curState.arrival_location,
     }
     }
 

@@ -174,7 +174,7 @@ export default class Management extends Component {
     addAirplane = (airline_name) => {
         const curState = this.state;
         if (curState.newAirplaneId === '' || curState.newAirplaneNumSeats === '') {
-            console.log('ERROR! Please check your input!!');
+            alert('ERROR! Please check your input!!');
         }
         axios.post(`/airplane/${curState.newAirplaneId}/${airline_name}/${curState.newAirplaneNumSeats}`).then(() => {
             window.location.reload(false);
@@ -184,7 +184,7 @@ export default class Management extends Component {
     addAirport = () => {
         const curState = this.state;
         if (curState.newAirportId === '' || curState.newAirportCity === '' || curState.newAirportName === '') {
-            console.log('ERROR! Please check your input!!');
+            alert('ERROR! Please check your input!!');
         }
         axios.post(`/airports/${curState.newAirportId}/${curState.newAirportCity}/${curState.newAirportName}`).then(() => {
             window.location.reload(false);
@@ -196,7 +196,7 @@ export default class Management extends Component {
         if (curState.newFlightAirplane === '' || curState.newFlightBasePrice === '' || curState.newFlightDepartureAirport === '' || curState.newFlightDepartureDate === ''
         || curState.newFlightArrivalAirport === '' || curState.newFlightArrivalDate === '' || curState.newFlightArrivalTime === '' || curState.newFlightNumber === ''
         || curState.newFlightDepartureTime === '') {
-            console.log('ERROR! Please check your inputs!!');
+            alert('ERROR! Please check your inputs!!');
             return;
         }
         const flight = {

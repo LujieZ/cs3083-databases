@@ -28,19 +28,19 @@ class Profile extends Component {
   handleSubmit = () => {
     const curState = this.state;
     if (curState.username === '' || curState.password === '') {
-      console.log('ERROR! Please check your log in information!!');
+      alert('ERROR! Please check your log in information!!');
       return;
     }
     axios.get(`/customer/${curState.username}`).then((res1) => {
       if (res1.data.length === 0) {
         axios.get(`/staff/${curState.username}`).then((res2) => {
           if (res2.data.length === 0) {
-            console.log('ERROR! Please check your log in information!!');
+            alert('ERROR! Please check your log in information!!');
             return;
           } else {
             console.log(res2.data);
             if (md5(curState.password) !== res2.data[0].password) {
-              console.log('ERROR! Please check your password!!');
+              alert('ERROR! Please check your password!!');
               return;
             }
             localStorage.setItem('user', JSON.stringify(res2.data[0]));
@@ -51,7 +51,7 @@ class Profile extends Component {
       } else {
         console.log(res1.data);
         if (md5(curState.password) !== res1.data[0].password) {
-          console.log('ERROR! Please check your password!!');
+          alert('ERROR! Please check your password!!');
           return;
         }
           localStorage.setItem('user', JSON.stringify(res1.data[0]));
