@@ -53,7 +53,12 @@ exports.showAllAirports = (req, res) => {
 };
 
 exports.showCustomerFlights = (req, res) => {
-  Flight.displayCustomerFlights(req.params.customer_email, req.params.date_1, req.params.date_2, req.params.departure_name, req.params.arrival_name, (err, data) => {
+  const date_1 = req.params.date_1 === '-1' ? null : req.params.date_1;
+  const date_2 = req.params.date_2 === '-1' ? null : req.params.date_2;
+  const departure_name = req.params.depart_name === '-1' ? null : req.params.depart_name;
+  const arrival_name = req.params.arrival_name === '-1' ? null : req.params.arrival_name;
+  console.log(date_1, date_2, departure_name, arrival_name);
+  Flight.displayCustomerFlights(req.params.customer_email, date_1, date_2, departure_name, arrival_name, (err, data) => {
   if (err)
     res.status(500).send({
       message: err.message || 'Some error occured while showing your flights.',

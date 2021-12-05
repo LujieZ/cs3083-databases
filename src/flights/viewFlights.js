@@ -35,6 +35,16 @@ export default class ViewFlights extends Component {
         });
       })
     }
+    if (localStorage.getItem('userType') === 'customer') {
+      const customer = localStorage.getItem('user');
+      const customerObj = JSON.parse(customer);
+      axios.get(`/flights-customer/${customerObj.customer_email}/-1/-1/-1/-1`).then((res) => {
+        console.log(res.data);
+        this.setState({
+          customer_flights: res.data,
+        });
+      })
+    }
   }
 
   updateDepatureDate1 = (e) => {
@@ -71,6 +81,20 @@ export default class ViewFlights extends Component {
       console.log(res.data);
       this.setState({
         staff_flights: res.data,
+      });
+    })
+  }
+
+  updateCustomerFlights = (customer_email) => {
+    const curState = this.state;
+    const date_1 = curState.departure_date1 === '' ? '-1' : curState.departure_date1;
+    const date_2 = curState.departure_date2 === '' ? '-1' : curState.departure_date2;
+    const depart_loc = curState.departure_location === '' ? '-1' : curState.departure_location;
+    const arrival_loc = curState.arrival_location === '' ? '-1' : curState.arrival_location;
+    axios.get(`/flights-customer/${customer_email}/${date_1}/${date_2}/${depart_loc}/${arrival_loc}`).then((res) => {
+      console.log(res.data);
+      this.setState({
+        customer_flights: res.data,
       });
     })
   }
@@ -158,10 +182,78 @@ export default class ViewFlights extends Component {
       );
     }
     if (localStorage.getItem('userType') === 'customer') {
-      const curtomer = localStorage.getItem('user');
-      const curtomerObj = JSON.parse(curtomer);
+      const customer = localStorage.getItem('user');
+      const customerObj = JSON.parse(customer);
+      const customerFlightTrs = curState.customer_flights.map((flight) => {
+        return (
+          <tr>
+          <td>{flight.flight_num}</td>
+          <td>{flight.ticket_id}</td>
+          <td>{flight.departure_date} {flight.departure_time} From {flight.depart_city}</td>
+          <td>{flight.arrival_date} {flight.arrival_time} At {flight.arrival_city}</td>
+          <td>{flight.status}</td>
+        </tr>
+        )
+      })
       return (<div style={{'color': '#ffffff'}}>
         <h3 style={{'fontSize': '25px', 'marginBottom': '50px'}}>My Flights</h3>
+        <table id="flights" style={{'color': '#372c2e', 'marginBottom': '15px', 'margin-left':'auto', 'margin-right':'auto'}}>
+                <tr>
+                    <th>Flight Number</th>
+                    <th>Ticket ID</th>
+                    <th>Departure</th>
+                    <th>Arrival</th>
+                    <th>Status</th>
+                </tr>
+                    {customerFlightTrs}
+          </table>
+          <br/>
+          <form>
+            <label for="depature-date" style={{'marginBottom': '7px'}}>Depature Date: From {' '}</label>
+            <input
+              id="depature-date"
+              type="text"
+              size="25"
+              placeholder='Date in YYYY-mm-DD'
+              onChange={this.updateDepatureDate1}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            {' '} to {' '}
+            <input
+              id="depature-date"
+              type="text"
+              size="25"
+              placeholder='Date in YYYY-mm-DD'
+              onChange={this.updateDepatureDate2}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="departure-location" style={{'marginBottom': '7px'}}>Departure Location: </label>
+            <input
+              id="departure-location"
+              type="text"
+              size="25"
+              placeholder='Depature City or Airport'
+              onChange={this.updateDepatureLocation}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/><br/>
+            <label for="arrival-location" style={{'marginBottom': '7px'}}>Arrival Location: </label>
+            <input
+              id="arrival-location"
+              type="text"
+              size="25"
+              placeholder='Arrival City or Airport'
+              onChange={this.updateArrivalLocation}
+              style={{'color': 'black', 'fontSize': '18px'}}
+            />
+            <br/>
+            <Button
+              onClick={() => this.updateCustomerFlights(customerObj.customer_email)}
+              className='button'>
+                Find My Flights
+            </Button>
+          </form>
       </div>
       );
     }

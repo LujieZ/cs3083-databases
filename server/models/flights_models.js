@@ -112,9 +112,11 @@ Flight.changeFlightTickets = (flight_num, airline_name, departure_date, departur
 };
 
 Flight.displayCustomerFlights = (customer_email, date_1, date_2, depart_name, arrival_name, result) => {
-  if(date_1 === undefined || date_2 === undefined) {
-  sql.query("SELECT ticket_id, flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND (departure_date > CURRENT_DATE() OR (departure_date = CURRENT_DATE() AND departure_time > CURRENT_TIME())) AND customer_email=? AND (? IS NULL OR dep.name=? OR dep.city=?) AND (? IS NULL OR arr.name=? OR arr.city=?)",
-  [customer_email,depart_name, depart_name, depart_name, arrival_name, arrival_name, arrival_name], (err, res) => {
+  if(date_1 === null && date_2 === null && depart_name === null && arrival_name === null) {
+  sql.query("SELECT ticket_id, flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS \
+  depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS \
+    arr, Airport AS dep) NATURAL JOIN Ticket WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND \
+    (departure_date > CURRENT_DATE() OR (departure_date = CURRENT_DATE() AND departure_time > CURRENT_TIME())) AND customer_email=?", customer_email, (err, res) => {
     if (err) {
         console.log('error: ', err);
         result(null, err);
@@ -124,8 +126,27 @@ Flight.displayCustomerFlights = (customer_email, date_1, date_2, depart_name, ar
       console.log('Flights: ', res);
       result(null, res);
     });
+  } else if (date_1 === null && date_2 === null && (depart_name !== null || arrival_name !== null))  {
+    sql.query("SELECT ticket_id, flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS \
+    depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS \
+      arr, Airport AS dep) NATURAL JOIN Ticket WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND \
+      (departure_date > CURRENT_DATE() OR (departure_date = CURRENT_DATE() AND departure_time > CURRENT_TIME())) AND customer_email=? AND (? \
+        IS NULL OR dep.name=? OR dep.city=?) AND (? IS NULL OR arr.name=? OR arr.city=?)",
+    [customer_email,depart_name, depart_name, depart_name, arrival_name, arrival_name, arrival_name], (err, res) => {
+      if (err) {
+          console.log('error: ', err);
+          result(null, err);
+          return;
+        }
+  
+        console.log('Flights: ', res);
+        result(null, res);
+      });
   } else {
-    sql.query("SELECT ticket_id, flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND customer_email=? AND (departure_date BETWEEN ? AND ?) AND (arrival_date BETWEEN ? AND ?) AND (? IS NULL OR dep.name=? OR dep.city=?) AND (? IS NULL OR arr.name=? OR arr.city=?)",
+    sql.query("SELECT ticket_id, flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS depart_city,\
+    arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS arr, Airport AS dep) NATURAL\
+    JOIN Ticket WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND customer_email=? AND (departure_date BETWEEN\
+      ? AND ?) AND (arrival_date BETWEEN ? AND ?) AND (? IS NULL OR dep.name=? OR dep.city=?) AND (? IS NULL OR arr.name=? OR arr.city=?)",
     [customer_email, date_1, date_2, date_1, date_2, depart_name, depart_name, depart_name, arrival_name, arrival_name, arrival_name], (err, res) => {
       if (err) {
           console.log('error: ', err);
