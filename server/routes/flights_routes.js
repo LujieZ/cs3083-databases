@@ -11,13 +11,13 @@ module.exports = (app) => {
 
     app.get('/airports', flights.showAllAirports);
     
-    app.get('/flights/:customer_email/:date_1/:date_2/:depart_name/:arrival_name',flights.showCustomerFlights);
+    app.get('/flights-customer/:customer_email/:date_1/:date_2/:depart_name/:arrival_name',flights.showCustomerFlights);
+
+    app.get('/flights-staff/:airline_name/:date_1/:date_2/:depart_name/:arrival_name',flights.showStaffFlights);
 
     app.get('/flights-searched/:depart_name/:departure_date/:arrival_name', flights.searchFlightsOneWay);
 
     app.get('/flights-searched/:depart_name/:departure_date/:arrival_name/:return_date', flights.searchFlightsReturn);
-
-    app.get('/flights/:airline_name/:date_1/:date_2/:depart_name/:arrival_name',flights.showStaffFlights);
 
     app.get('/customers/:airline_name/:flight_num/:departure_time/:departure_date', flights.showCustomersOnFlight);
 
@@ -33,7 +33,7 @@ module.exports = (app) => {
 
     app.put('/flight-status/:flight_num/:airline_name/:departure_date/:departure_time/:status', flights.updateFlightStatus);
 
-    app.put('/flight-tickets/:flight_num/:airline_name/:departure_date/:departure_time/:flight_num/:airline_name/:departure_date/:departure_time', flights.updateFlightTicekts);
+    // app.put('/flight-tickets/:flight_num/:airline_name/:departure_date/:departure_time/:flight_num/:airline_name/:departure_date/:departure_time', flights.updateFlightTicekts);
 
     app.post('/flight', flights.createNewFlight);
     
@@ -43,5 +43,5 @@ module.exports = (app) => {
 
     app.post('/ticket/:id/:customer_email/:airline_name/:flight_num/:departure_date/:departure_time', flights.createNewTicket);
 
-    app.post('/ticket/:id/:customer_email/:airline_name/:flight_num/:departure_date/:departure_time', flights.createNewPurchase);
+    app.post('/ticket-purchase/:id/:customer_email/:airline_name/:flight_num/:departure_date/:departure_time', flights.createNewPurchase);
 }

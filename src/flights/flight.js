@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import TicketPurchase from './ticketPurchase';
 import './flight.css';
 
 export default class Flight extends Component {
@@ -213,6 +215,11 @@ export default class Flight extends Component {
             <td>{flight.arrival_date} {flight.arrival_time} At {flight.arrival_city}</td>
             <td>{flight.base_price}</td>
             <td>{flight.status}</td>
+            <td>
+              <Link to='/purchase'>
+                <Button>Purchase</Button>
+              </Link>
+            </td>
           </tr>
           )
         })
@@ -225,6 +232,11 @@ export default class Flight extends Component {
             <td>{flight.arrival_date} {flight.arrival_time} At {flight.arrival_city}</td>
             <td>{flight.base_price}</td>
             <td>{flight.status}</td>
+            <td>
+              <Link to='/purchase'>
+                <Button>Purchase</Button>
+              </Link>
+            </td>
           </tr>
           )
         })
@@ -240,6 +252,7 @@ export default class Flight extends Component {
                     <th>Arrival</th>
                     <th>Base Price</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
                     {leavingFlightTrs}
             </table>
@@ -252,6 +265,7 @@ export default class Flight extends Component {
                     <th>Arrival</th>
                     <th>Base Price</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
                     {returningFlightTrs}
             </table>
@@ -267,6 +281,11 @@ export default class Flight extends Component {
             <td>{flight.arrival_date} {flight.arrival_time} At {flight.arrival_city}</td>
             <td>{flight.base_price}</td>
             <td>{flight.status}</td>
+            <td>
+              <Link to='/purchase'>
+                <Button>Purchase</Button>
+              </Link>
+            </td>
           </tr>
           )
         })
@@ -281,6 +300,7 @@ export default class Flight extends Component {
                     <th>Arrival</th>
                     <th>Base Price</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
                     {flightTrs}
             </table>

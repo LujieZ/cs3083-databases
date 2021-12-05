@@ -13,6 +13,7 @@ export default class TicketPurchase extends Component {
     constructor(props) {
       super(props);
       this.state = {
+        flight: props.flight,
         email: '',
         airlineName: '',
         flightNum: '',
@@ -60,15 +61,9 @@ export default class TicketPurchase extends Component {
         });
     }
 
-    addPaymentInfo = () => {
-        const paymentInfo
-        axios.post('/flight', qs.stringify(paymentInfo), config).then(() => {
-            this.componentDidMount();
-          });
-    }
-
     render() {
         const curState = this.state;
+        console.log(curState.flight);
         return(
           <div style={{'color': '#ffffff'}}>
           <h2 style={{'fontSize': '35px', 'marginBottom': '50px'}}>Purchase a Ticket</h2>

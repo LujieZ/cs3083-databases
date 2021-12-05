@@ -69,7 +69,7 @@ class Profile extends Component {
         return (
           <div style={{'color': '#ffffff'}}>
           <p>You are logged in as {loggedInUser}</p>
-          <Link to='/my-flights'>
+          <Link to='/view-flights'>
           <Button className='button'>View My Flights</Button>
           </Link>
           <br/>
@@ -96,7 +96,7 @@ class Profile extends Component {
       return (
         <div style={{'color': '#ffffff'}}>
         <p>You are logged in as {loggedInUser}</p>
-        <Link to='/'>
+        <Link to='/view-flights'>
         <Button className='button'>View Flights Information</Button>
         </Link>
         <br/>

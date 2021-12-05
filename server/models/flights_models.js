@@ -92,13 +92,12 @@ Flight.changeFlightStatus = (flight_num, departure_date, departure_time, status,
       return;
     }
 
-    console.log('Airplanes: ', res);
     console.log('Flights: ', res);
     result(null, res);
   });
 };
 
-Flight.changeFlightTickets = (flight_num, airline_name, departure_date, departure_time, flight_num, airline_name, departure_date, departure_time, result) => {
+Flight.changeFlightTickets = (flight_num, airline_name, departure_date, departure_time, result) => {
   sql.query("UPDATE Flight SET num_of_tickets_booked = (SELECT COUNT(flight_num) FROM Ticket WHERE Ticket.flight_num=? AND airline_name=? AND departure_date=? AND departure_time=?) WHERE flight_num=? AND airline_name=? AND departure_date=? AND departure_time=?",
   [flight_num, airline_name, departure_date, departure_time, flight_num, airline_name, departure_date, departure_time], (err, res) => {
     if (err) {
@@ -107,14 +106,13 @@ Flight.changeFlightTickets = (flight_num, airline_name, departure_date, departur
       return;
     }
 
-    console.log('Airplanes: ', res);
     console.log('Flights: ', res);
     result(null, res);
   });
 };
 
-Flight.displayCustomerFlights = (customer_email, date_1=NULL, date_2=NULL, depart_name=NULL, arrival_name=NULL, result) => {
-  if(date_1==NULL || date_2==NULL) {
+Flight.displayCustomerFlights = (customer_email, date_1, date_2, depart_name, arrival_name, result) => {
+  if(date_1 === undefined || date_2 === undefined) {
   sql.query("SELECT ticket_id, flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND (departure_date > CURRENT_DATE() OR (departure_date = CURRENT_DATE() AND departure_time > CURRENT_TIME())) AND customer_email=? AND (? IS NULL OR dep.name=? OR dep.city=?) AND (? IS NULL OR arr.name=? OR arr.city=?)",
   [customer_email,depart_name, depart_name, depart_name, arrival_name, arrival_name, arrival_name], (err, res) => {
     if (err) {
@@ -179,9 +177,13 @@ Flight.getFlightsReturn = (depart_name, departure_date, arrival_name, return_dat
     });
 };
 
-Flight.displayStaffFlights = (airline_name, date_1=NULL, date_2=NULL, depart_name=NULL, arrival_name=NULL, result) => {
-  if(date_1==NULL || date_2==NULL) {
-  sql.query("SELECT flight_num, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS arr, Airport AS dep) WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND ((departure_date BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)) OR (departure_date = CURRENT_DATE() AND departure_time > CURRENT_TIME())) AND airline_name=? AND (? IS NULL OR dep.name=? OR dep.city=?) AND (? IS NULL OR arr.name=? OR arr.city=?)",
+Flight.displayStaffFlights = (airline_name, date_1, date_2, depart_name, arrival_name, result) => {
+  if (date_1 === null && date_2 === null && depart_name === null && arrival_name === null) {
+  sql.query("SELECT flight_num, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS depart_city, \
+  arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS arr, \
+  Airport AS dep) WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND ((departure_date \
+  BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)) OR (departure_date = CURRENT_DATE() AND departure_time > \
+  CURRENT_TIME())) AND airline_name=?",
   [airline_name, depart_name, depart_name, depart_name, arrival_name, arrival_name, arrival_name], (err, res) => {
     if (err) {
         console.log('error: ', err);
@@ -192,9 +194,30 @@ Flight.displayStaffFlights = (airline_name, date_1=NULL, date_2=NULL, depart_nam
       console.log('Flights: ', res);
       result(null, res);
     });
+  }
+  else if (date_1 === null && date_2 === null && (depart_name !== null || arrival_name !== null)) {
+    sql.query("SELECT flight_num, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS depart_city, arrival_date,\
+    arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS arr, Airport AS dep) WHERE \
+    Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND ((departure_date BETWEEN CURRENT_DATE() AND \
+    DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)) OR (departure_date = CURRENT_DATE() AND departure_time > CURRENT_TIME())) AND airline_name=? \
+    AND (? is NULL OR dep.name=? OR dep.city=?) AND (? is NULL OR arr.name=? OR arr.city=?)",
+    [airline_name, depart_name, depart_name, depart_name, arrival_name, arrival_name, arrival_name], (err, res) => {
+      if (err) {
+          console.log('error: ', err);
+          result(null, err);
+          return;
+        }
+  
+        console.log('Flights: ', res);
+        result(null, res);
+      });
   } else {
-    sql.query("SELECT flight_num, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS arr, Airport AS dep) WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND (departure_date BETWEEN ? AND ?) AND (arrival_date BETWEEN ? AND ?) AND airline_name=? AND (? IS NULL OR dep.name=? OR dep.city=?) AND (? IS NULL OR arr.name=? OR arr.city=?)",
-    [airline_name, date_1, date_2, date_1, date_2, depart_name, depart_name, depart_name, arrival_name, arrival_name, arrival_name], (err, res) => {
+    sql.query("SELECT flight_num, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS \
+    depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM \
+    (Flight, Airport AS arr, Airport AS dep) WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = \
+    arr.airport_id AND (departure_date BETWEEN ? AND ?) AND airline_name=? AND (? IS \
+      NULL OR dep.name=? OR dep.city=?) AND (? IS NULL OR arr.name=? OR arr.city=?)",
+    [date_1, date_2, airline_name, depart_name, depart_name, depart_name, arrival_name, arrival_name, arrival_name], (err, res) => {
       if (err) {
           console.log('error: ', err);
           result(null, err);
