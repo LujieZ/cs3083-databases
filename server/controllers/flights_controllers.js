@@ -53,7 +53,7 @@ exports.showAllAirports = (req, res) => {
 };
 
 exports.showCustomerFlights = (req, res) => {
-  Flight.displayCustomerFlights(req.params.customer_email, req.params.date_1, req.params.date_2, req.params.depart_name, req.params.arrival_name, (err, data) => {
+  Flight.displayCustomerFlights(req.params.customer_email, req.params.date_1, req.params.date_2, req.params.departure_name, req.params.arrival_name, (err, data) => {
   if (err)
     res.status(500).send({
       message: err.message || 'Some error occured while showing your flights.',
@@ -63,7 +63,7 @@ exports.showCustomerFlights = (req, res) => {
 };
 
 exports.searchFlightsOneWay = (req, res) => {
-  Flight.getFlightsOneWay(req.params.depart_name,req.params.depart_date,req.params.arrival_name, (err, data) => {
+  Flight.getFlightsOneWay(req.params.departure_name,req.params.departure_date,req.params.arrival_name, (err, data) => {
   if (err)
     res.status(500).send({
       message: err.message || 'Some error occured while searching for flights.',
@@ -73,7 +73,7 @@ exports.searchFlightsOneWay = (req, res) => {
 };
 
 exports.searchFlightsReturn = (req, res) => {
-  Flight.getFlightsReturn(req.params.depart_name,req.params.depart_date,req.params.arrival_name, req.params.return_date, (err, data) => {
+  Flight.getFlightsReturn(req.params.departure_name,req.params.departure_date,req.params.arrival_name, req.params.return_date, (err, data) => {
   if (err)
     res.status(500).send({
       message: err.message || 'Some error occured while searching for flights.',
@@ -83,7 +83,7 @@ exports.searchFlightsReturn = (req, res) => {
 };
 
 exports.showStaffFlights = (req, res) => {
-  Flight.displayStaffFlights(req.params.airline_name, req.params.date_1, req.params.date_2, req.params.depart_name, req.params.arrival_name, (err, data) => {
+  Flight.displayStaffFlights(req.params.airline_name, req.params.date_1, req.params.date_2, req.params.departure_name, req.params.arrival_name, (err, data) => {
   if (err)
     res.status(500).send({
       message: err.message || 'Some error occured while showing your flights.',
@@ -92,6 +92,65 @@ exports.showStaffFlights = (req, res) => {
 });
 };
 
+exports.showCustomersOnFlight = (req, res) => {
+  Flight.displayCustomersOnFlight(req.params.airline_name, req.params.flight_num, req.params.departure_date, req.params.departure_time, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occured while showing customers on this flight.',
+      });
+    else res.send(data);
+  });
+}
+
+exports.showFrequentCustomers = (req, res) => {
+  Flight.displayFrequentCustomers(req.params.airline_name, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occured while showing frequent customers.',
+      });
+    else res.send(data);
+  });
+}
+
+exports.showMostFrequentCustomer = (req, res) => {
+  Flight.displayMostFrequentCustomer((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occured while showing most frequent customer.',
+      });
+    else res.send(data);
+  });
+}
+
+exports.showFlightsOfCustomer = (req, res) => {
+  Flight.displayFlightsOfCustomer(req.params.airline_name, req.params.customer_email, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occured while showing flights of this customer.',
+      });
+    else res.send(data);
+  });
+}
+
+exports.showRevenuePastMonth = (req, res) => {
+  Flight.displayRevenuePastMonth(req.params.airline_name, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occured while showing past month revenue.',
+      });
+    else res.send(data);
+  });
+}
+
+exports.showRevenuePastYear = (req, res) => {
+  Flight.displayRevenuePastYear(req.params.airline_name, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occured while showing past year revenue.',
+      });
+    else res.send(data);
+  });
+}
 
 exports.createNewFlight = (req, res) => {
   const flight = new Flight({

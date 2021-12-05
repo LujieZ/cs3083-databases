@@ -13,11 +13,23 @@ module.exports = (app) => {
     
     app.get('/flights/:customer_email/:date_1/:date_2/:depart_name/:arrival_name',flights.showCustomerFlights);
 
-    app.get('/flights-searched/:depart_name/:depart_date/:arrival_name', flights.searchFlightsOneWay);
+    app.get('/flights-searched/:depart_name/:departure_date/:arrival_name', flights.searchFlightsOneWay);
 
-    app.get('/flights-searched/:depart_name/:depart_date/:arrival_name/:return_date', flights.searchFlightsReturn);
+    app.get('/flights-searched/:depart_name/:departure_date/:arrival_name/:return_date', flights.searchFlightsReturn);
 
     app.get('/flights/:airline_name/:date_1/:date_2/:depart_name/:arrival_name',flights.showStaffFlights);
+
+    app.get('/customers/:airline_name/:flight_num/:departure_time/:departure_date', flights.showCustomersOnFlight);
+
+    app.get('/customers/:airline_name', flights.showFrequentCustomers);
+
+    app.get('/customer-most-frequent', flights.showMostFrequentCustomer);
+
+    app.get('/flights/:airline_name/:customer_email', flights.showFlightsOfCustomer);
+
+    app.get('/revenue-month/:airline_name', flights.showRevenuePastMonth);
+
+    app.get('/revenue-year/:airline_name', flights.showRevenuePastYear);
 
     app.put('/flight-status/:flight_num/:airline_name/:departure_date/:departure_time/:status', flights.updateFlightStatus);
 
