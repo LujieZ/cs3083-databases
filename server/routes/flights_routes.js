@@ -19,7 +19,7 @@ module.exports = (app) => {
 
     app.get('/flights-searched/:depart_name/:departure_date/:arrival_name/:return_date', flights.searchFlightsReturn);
 
-    app.get('/customers/:airline_name/:flight_num/:departure_time/:departure_date', flights.showCustomersOnFlight);
+    app.get('/customers/:airline_name/:flight_num/:departure_date/:departure_time', flights.showCustomersOnFlight);
 
     app.get('/customers/:airline_name', flights.showFrequentCustomers);
 

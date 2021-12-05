@@ -17,6 +17,7 @@ export default class ViewFlights extends Component {
     this.state = {
       staff_flights: [],
       customer_flights: [],
+      passagers: [],
       departure_date1: '',
       departure_date2: '',
       departure_location: '',
@@ -71,6 +72,16 @@ export default class ViewFlights extends Component {
     });
   }
 
+  updatePassagersOnFlight = (flight, airline_name) => {
+    axios.get(`/customers/${airline_name}/${flight.flight_num}/${flight.departure_date}/${flight.departure_time}`).then((res) => {
+      console.log(res.data);
+      this.setState({
+        passagers: res.data,
+      })
+      return res.data;
+    })
+  }
+
   updateStaffFlights = (airline_name) => {
     const curState = this.state;
     const date_1 = curState.departure_date1 === '' ? '-1' : curState.departure_date1;
@@ -113,6 +124,7 @@ export default class ViewFlights extends Component {
       const staff = localStorage.getItem('user');
       const staffObj = JSON.parse(staff);
       const staffFlightTrs = curState.staff_flights.map((flight) => {
+        const passagers = this.updatePassagersOnFlight(flight, staffObj.airline_name);
         return (
           <tr>
           <td>{flight.flight_num}</td>
@@ -120,9 +132,6 @@ export default class ViewFlights extends Component {
           <td>{flight.arrival_date} {flight.arrival_time} At {flight.arrival_city}</td>
           <td>{flight.status}</td>
           <td>
-            <Link to='/'>
-              <Button>View Passagers</Button>
-            </Link>
           </td>
         </tr>
         )

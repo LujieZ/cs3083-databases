@@ -146,8 +146,8 @@ Flight.displayCustomerFlights = (customer_email, date_1, date_2, depart_name, ar
     sql.query("SELECT ticket_id, flight_num, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, dep.city AS depart_city,\
     arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city, status FROM (Flight, Airport AS arr, Airport AS dep) NATURAL\
     JOIN Ticket WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id AND customer_email=? AND (departure_date BETWEEN\
-      ? AND ?) AND (arrival_date BETWEEN ? AND ?) AND (? IS NULL OR dep.name=? OR dep.city=?) AND (? IS NULL OR arr.name=? OR arr.city=?)",
-    [customer_email, date_1, date_2, date_1, date_2, depart_name, depart_name, depart_name, arrival_name, arrival_name, arrival_name], (err, res) => {
+      ? AND ?) AND (? IS NULL OR dep.name=? OR dep.city=?) AND (? IS NULL OR arr.name=? OR arr.city=?)",
+    [customer_email, date_1, date_2, depart_name, depart_name, depart_name, arrival_name, arrival_name, arrival_name], (err, res) => {
       if (err) {
           console.log('error: ', err);
           result(null, err);
@@ -252,8 +252,8 @@ Flight.displayStaffFlights = (airline_name, date_1, date_2, depart_name, arrival
 };
 
 Flight.displayCustomersOnFlight = (airline_name, flight_num, departure_date, departure_time, result) => {
-  sql.query('SELECT customer_email FROM Flight, Ticket Where Flight.flight_num=Ticket.flight_num AND Flight.airline_name=Ticket.airline_name AND Flight.departure_date=Ticket.departure_date AND Flight.departure_time=Ticket.departure_time AND flight_number=? AND airline_name=? AND departure_date=? AND departure_time=?', 
-  [airline_name, flight_num, departure_date, departure_time], (err, res) => {
+  sql.query('SELECT customer_email FROM Flight, Ticket Where Flight.flight_num=Ticket.flight_num AND Flight.airline_name=Ticket.airline_name AND Flight.departure_date=Ticket.departure_date AND Flight.departure_time=Ticket.departure_time AND Flight.flight_num=? AND Flight.airline_name=? AND Flight.departure_date=? AND Flight.departure_time=?', 
+  [flight_num, airline_name, departure_date, departure_time], (err, res) => {
     if (err) {
         console.log('error: ', err);
         result(null, err);
