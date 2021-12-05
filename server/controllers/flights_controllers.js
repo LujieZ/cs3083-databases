@@ -53,7 +53,7 @@ exports.showAllAirports = (req, res) => {
 };
 
 exports.showCustomerFlights = (req, res) => {
-  Flight.displayCustomerFlights(req.params.customer_name, (err, data) => {
+  Flight.displayCustomerFlights(req.params.customer_email, req.params.date_1, req.params.date_2, req.params.depart_name, req.params.arrival_name, (err, data) => {
   if (err)
     res.status(500).send({
       message: err.message || 'Some error occured while showing your flights.',
@@ -74,6 +74,16 @@ exports.searchFlightsOneWay = (req, res) => {
 
 exports.searchFlightsReturn = (req, res) => {
   Flight.getFlightsReturn(req.params.depart_name,req.params.depart_date,req.params.arrival_name, req.params.return_date, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while searching for flights.',
+    });
+  else res.send(data);
+});
+};
+
+exports.showStaffFlights = (req, res) => {
+  Flight.displayStaffFlights(req.params.airline_name, req.params.date_1, req.params.date_2, req.params.depart_name, req.params.arrival_name, (err, data) => {
   if (err)
     res.status(500).send({
       message: err.message || 'Some error occured while showing your flights.',
@@ -107,7 +117,17 @@ exports.createNewFlight = (req, res) => {
 }
 
 exports.updateFlightStatus = (req, res) => {
-  Flight.changeFlightStatus(req.params.flight_num, req.params.departure_date, req.params.departure_time, req.params.status, (err, data) => {
+  Flight.changeFlightStatus(req.params.flight_num, req.params.airline_name, req.params.departure_date, req.params.departure_time, req.params.status, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occurred while changing flight status.',
+      });
+    else res.send(data);
+  });
+}
+
+exports.updateFlightTickets = (req, res) => {
+  Flight.changeFlightTickets(req.params.flight_num, req.params.airline_name, req.params.departure_date, req.params.departure_time, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Some error occurred while changing flight status.',
@@ -131,6 +151,26 @@ exports.createNewAirport = (req, res) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Some error occurred while adding new airport.',
+      });
+    else res.send(data);
+  });
+};
+
+exports.createNewTicket = (req, res) => {
+  Flight.addNewTicket(req.params.id, req.params.customer_email, req.params.airline_name, req.params.flight_num, req.params.departure_date, req.params.departure_time, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occurred while creating new ticket.',
+      });
+    else res.send(data);
+  });
+};
+
+exports.createNewPurchase = (req, res) => {
+  Flight.addNewPurchaset(req.params.id, req.params.customer_email, req.params.sold_price, req.params.card_type, req.params.card_num, req.params.card_name, req.params.exp_date, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occurred while creating new ticket.',
       });
     else res.send(data);
   });

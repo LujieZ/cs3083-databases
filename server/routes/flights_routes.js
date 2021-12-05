@@ -11,17 +11,25 @@ module.exports = (app) => {
 
     app.get('/airports', flights.showAllAirports);
     
-    app.get('/flights/:customer_name',flights.showCustomerFlights);
+    app.get('/flights/:customer_email/:date_1/:date_2/:depart_name/:arrival_name',flights.showCustomerFlights);
 
     app.get('/flights-searched/:depart_name/:depart_date/:arrival_name', flights.searchFlightsOneWay);
 
     app.get('/flights-searched/:depart_name/:depart_date/:arrival_name/:return_date', flights.searchFlightsReturn);
 
-    app.put('/flight-status/:flight_num/:departure_date/:departure_time/:status', flights.updateFlightStatus);
+    app.get('/flights/:airline_name/:date_1/:date_2/:depart_name/:arrival_name',flights.showStaffFlights);
+
+    app.put('/flight-status/:flight_num/:airline_name/:departure_date/:departure_time/:status', flights.updateFlightStatus);
+
+    app.put('/flight-tickets/:flight_num/:airline_name/:departure_date/:departure_time/:flight_num/:airline_name/:departure_date/:departure_time', flights.updateFlightTicekts);
 
     app.post('/flight', flights.createNewFlight);
     
     app.post('/airplane/:id/:airline_name/:num_seats/', flights.createNewAirplane);
 
     app.post('/airports/:id/:airport_name/:airport_city/', flights.createNewAirport);
+
+    app.post('/ticket/:id/:customer_email/:airline_name/:flight_num/:departure_date/:departure_time', flights.createNewTicket);
+
+    app.post('/ticket/:id/:customer_email/:airline_name/:flight_num/:departure_date/:departure_time', flights.createNewPurchase);
 }
