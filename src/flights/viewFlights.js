@@ -75,6 +75,10 @@ export default class ViewFlights extends Component {
     const curState = this.state;
     const date_1 = curState.departure_date1 === '' ? '-1' : curState.departure_date1;
     const date_2 = curState.departure_date2 === '' ? '-1' : curState.departure_date2;
+    if (date_1 !== '-1' && date_2 === '-1' || (date_1 === '-1' && date_2 !== '-1')) {
+      alert("ERROR! Please input a valid range of date!!");
+      return;
+    }
     const depart_loc = curState.departure_location === '' ? '-1' : curState.departure_location;
     const arrival_loc = curState.arrival_location === '' ? '-1' : curState.arrival_location;
     axios.get(`/flights-staff/${airline_name}/${date_1}/${date_2}/${depart_loc}/${arrival_loc}`).then((res) => {
@@ -89,6 +93,10 @@ export default class ViewFlights extends Component {
     const curState = this.state;
     const date_1 = curState.departure_date1 === '' ? '-1' : curState.departure_date1;
     const date_2 = curState.departure_date2 === '' ? '-1' : curState.departure_date2;
+    if (date_1 !== '-1' && date_2 === '-1' || (date_1 === '-1' && date_2 !== '-1')) {
+      alert("ERROR! Please input a valid range of date!!");
+      return;
+    }
     const depart_loc = curState.departure_location === '' ? '-1' : curState.departure_location;
     const arrival_loc = curState.arrival_location === '' ? '-1' : curState.arrival_location;
     axios.get(`/flights-customer/${customer_email}/${date_1}/${date_2}/${depart_loc}/${arrival_loc}`).then((res) => {
