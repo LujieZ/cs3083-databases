@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
+import { useLocation } from 'react-router';
 
 const config = {
   headers: {
@@ -13,7 +14,6 @@ export default class TicketPurchase extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        flight: props.flight,
         email: '',
         airlineName: '',
         flightNum: '',
@@ -62,8 +62,10 @@ export default class TicketPurchase extends Component {
     }
 
     render() {
-        const curState = this.state;
-        console.log(curState.flight);
+      const flight = localStorage.getItem('flight');
+      const flightObj = JSON.parse(flight);
+      console.log(flightObj);
+      const curState = this.state;
         return(
           <div style={{'color': '#ffffff'}}>
           <h2 style={{'fontSize': '35px', 'marginBottom': '50px'}}>Purchase a Ticket</h2>

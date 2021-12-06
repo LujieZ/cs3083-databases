@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import TicketPurchase from './ticketPurchase';
+import { Link, Redirect } from 'react-router-dom';
 import './flight.css';
 
 export default class Flight extends Component {
@@ -103,6 +102,14 @@ export default class Flight extends Component {
           flights: res.data,
         });
       })
+    }
+  
+    handlePurchase = (flight) => {
+      localStorage.setItem('flight', JSON.stringify(flight));
+      const newflight = localStorage.getItem('flight');
+      const flightObj = JSON.parse(newflight);
+      console.log(flightObj);
+      window.location = '/purchase';
     }
 
     render() {
@@ -216,9 +223,9 @@ export default class Flight extends Component {
             <td>{flight.base_price}</td>
             <td>{flight.status}</td>
             <td>
-              <Link to='/purchase'>
-                <Button>Purchase</Button>
-              </Link>
+              <Button onClick={() => this.handlePurchase(flight)}>
+                Purchase
+              </Button>
             </td>
           </tr>
           )
@@ -233,9 +240,9 @@ export default class Flight extends Component {
             <td>{flight.base_price}</td>
             <td>{flight.status}</td>
             <td>
-              <Link to='/purchase'>
-                <Button>Purchase</Button>
-              </Link>
+              <Button onClick={() => this.handlePurchase(flight)}>
+                  Purchase
+              </Button>
             </td>
           </tr>
           )
@@ -282,7 +289,7 @@ export default class Flight extends Component {
             <td>{flight.base_price}</td>
             <td>{flight.status}</td>
             <td>
-              <Link to='/purchase'>
+              <Link onClick={() => this.handlePurchase(flight)}>
                 <Button>Purchase</Button>
               </Link>
             </td>

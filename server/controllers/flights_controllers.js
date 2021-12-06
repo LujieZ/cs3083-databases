@@ -68,7 +68,7 @@ exports.showCustomerFlights = (req, res) => {
 };
 
 exports.searchFlightsOneWay = (req, res) => {
-  Flight.getFlightsOneWay(req.params.departure_name,req.params.departure_date,req.params.arrival_name, (err, data) => {
+  Flight.getFlightsOneWay(req.params.depart_name, req.params.departure_date, req.params.arrival_name, (err, data) => {
   if (err)
     res.status(500).send({
       message: err.message || 'Some error occured while searching for flights.',
@@ -78,7 +78,7 @@ exports.searchFlightsOneWay = (req, res) => {
 };
 
 exports.searchFlightsReturn = (req, res) => {
-  Flight.getFlightsReturn(req.params.departure_name,req.params.departure_date,req.params.arrival_name, req.params.return_date, (err, data) => {
+  Flight.getFlightsReturn(req.params.depart_name, req.params.departure_date, req.params.arrival_name, req.params.return_date, (err, data) => {
   if (err)
     res.status(500).send({
       message: err.message || 'Some error occured while searching for flights.',
