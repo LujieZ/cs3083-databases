@@ -34,6 +34,7 @@ export default class ViewFlights extends Component {
         this.setState({
           staff_flights: res.data,
         });
+        this.updatePassagersOnFlights(staffObj.airline_name)
       })
     }
     if (localStorage.getItem('userType') === 'customer') {
@@ -72,14 +73,22 @@ export default class ViewFlights extends Component {
     });
   }
 
-  updatePassagersOnFlight = (flight, airline_name) => {
-    axios.get(`/customers/${airline_name}/${flight.flight_num}/${flight.departure_date}/${flight.departure_time}`).then((res) => {
-      console.log(res.data);
-      this.setState({
-        passagers: res.data,
+  updatePassagersOnFlights = (airline_name) => {
+    const curState = this.state;
+    const flights = curState.staff_flights;
+    let prevPassagers = [];
+    for (let i = 0; i < flights.length; i++) {
+      axios.get(`/customers/${airline_name}/${flights[i].flight_num}/${flights[i].departure_date}/${flights[i].departure_time}`).then((res) => {
+        let objects = res.data.map((obj) => {
+          return obj.customer_email;
+        })
+        prevPassagers.push(objects);
+        this.setState({
+          passagers: prevPassagers,
+        })
+        console.log(prevPassagers);
       })
-      return res.data;
-    })
+    }
   }
 
   updateStaffFlights = (airline_name) => {
@@ -123,8 +132,13 @@ export default class ViewFlights extends Component {
     if (localStorage.getItem('userType') === 'staff') {
       const staff = localStorage.getItem('user');
       const staffObj = JSON.parse(staff);
-      const staffFlightTrs = curState.staff_flights.map((flight) => {
-        const passagers = this.updatePassagersOnFlight(flight, staffObj.airline_name);
+      let listItems;
+      const staffFlightTrs = curState.staff_flights.map((flight, i) => {
+        if (curState.passagers[i] !== undefined) {
+          listItems = curState.passagers[i].map((passager) => {
+            return <li>{passager}</li>
+          });
+        }
         return (
           <tr>
           <td>{flight.flight_num}</td>
@@ -132,6 +146,7 @@ export default class ViewFlights extends Component {
           <td>{flight.arrival_date} {flight.arrival_time} At {flight.arrival_city}</td>
           <td>{flight.status}</td>
           <td>
+            <ul>{listItems}</ul>
           </td>
         </tr>
         )
