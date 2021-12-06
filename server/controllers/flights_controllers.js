@@ -162,6 +162,36 @@ exports.showRevenuePastYear = (req, res) => {
   });
 }
 
+exports.showNumberOfSeatsLeft = (req, res) => {
+  Flight.displayNumberOfSeatsLeft(req.params.airline_name, req.params.flight_num, req.params.departure_date, req.params.departure_time, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occured while showing number of seats left.',
+      });
+    else res.send(data);
+  });
+}
+
+exports.showTop3Destination3Month = (req, res) => {
+  Flight.displayTop3Destination3Month(req.params.airline_name, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occured while showing past 3 months top destination.',
+      });
+    else res.send(data);
+  });
+}
+
+exports.showTop3DestinationYear = (req, res) => {
+  Flight.displayTop3Destination3Month(req.params.airline_name, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occured while showing past year top destination.',
+      });
+    else res.send(data);
+  });
+}
+
 exports.createNewFlight = (req, res) => {
   const flight = new Flight({
     flight_number: req.body.flight_number,

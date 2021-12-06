@@ -344,6 +344,75 @@ Flight.displayRevenuePastYear = (airline_name, result) => {
     });
 };
 
+Flight.displayNumberOfSeatsLeft = (airline_name, flight_num, departure_date, departure_time, result) => {
+  sql.query('SELECT (Airplane.num_seats-Flight.num_of_tickets_booked) AS num_of_seats_left FROM Flight NATURAL JOIN Airplane \
+  Where Flight.airline_name=? AND Flight.flight_num=? AND Flight.departure_date=? AND Flight.departure_time=?', 
+  [airline_name, flight_num, departure_date, departure_time], (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Airports: ', res);
+      result(null, res);
+    });
+};
+
+
+Flight.displayTop3Destination3Month = (airline_name, result) => {
+  sql.query('CREATE VIEW top_destinations_3_months AS SELECT arr.city AS destination, SUM(num_of_tickets_booked) AS total_tickets_booked  \
+  FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket NATURAL JOIN Purchases WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id \
+  AND Flight.airline_name=? AND (Purchases.purchase_date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -3 MONTH) AND CURRENT_DATE()) GROUP BY destination', 
+  airline_name, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Airplanes: ', res);
+      result(null, res);
+    });
+  sql.query('SELECT * FROM top_destinations ORDER BY total_tickets_booked LIMIT 3 ', 
+  airline_name, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Airplanes: ', res);
+      result(null, res);
+    });
+};
+
+Flight.displayTop3DestinationYear = (airline_name, result) => {
+  sql.query('CREATE VIEW top_destinations_year AS SELECT arr.city AS destination, SUM(num_of_tickets_booked) AS total_tickets_booked  \
+  FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket NATURAL JOIN Purchases WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id \
+  AND Flight.airline_name=? AND (Purchases.purchase_date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 YEAR) AND CURRENT_DATE()) GROUP BY destination', 
+  airline_name, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Airplanes: ', res);
+      result(null, res);
+    });
+  sql.query('SELECT * FROM top_destinations ORDER BY total_tickets_booked LIMIT 3', (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Airplanes: ', res);
+      result(null, res);
+    });
+};
+
 Flight.addNewFlight = (flight, result) => {
   sql.query("INSERT INTO Flight SET flight_num=?, airline_name=?, airplane_id=?, departure_date=?, departure_time=?, depart_airport=?,\
   arrival_date=?, arrival_time=?, arrival_airport=?, base_price=?, status='ONTIME', avg_rating=0.00, num_of_tickets_booked=0",

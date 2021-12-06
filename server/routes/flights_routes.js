@@ -31,6 +31,12 @@ module.exports = (app) => {
 
     app.get('/revenue-year/:airline_name', flights.showRevenuePastYear);
 
+    app.get('/seats-left/:airline_name/:flight_num/:departure_date/:departure_time', flights.showNumberOfSeatsLeft);
+
+    app.get('/destination-3month/:airline_name', flights.showTop3Destination3Month);
+
+    app.get('/destination-year/:airline_name', flights.showTop3DestinationYear);
+
     app.put('/flight-status/:flight_num/:airline_name/:departure_date/:departure_time/:status', flights.updateFlightStatus);
 
     // app.put('/flight-tickets/:flight_num/:airline_name/:departure_date/:departure_time/:flight_num/:airline_name/:departure_date/:departure_time', flights.updateFlightTicekts);
