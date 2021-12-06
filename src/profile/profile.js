@@ -104,7 +104,7 @@ class Profile extends Component {
         <Button className='button'>View Rating Information</Button>
         </Link>
         <br/>
-        <Link to='/'>
+        <Link to='/airline'>
         <Button className='button'>View Airline Information</Button>
         </Link>
         <br/>

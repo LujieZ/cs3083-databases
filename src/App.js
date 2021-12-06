@@ -8,6 +8,7 @@ import Registration from "./profile/registration";
 import Management from "./flights/management";
 import ViewFlights from "./flights/viewFlights";
 import TicketPurchase from "./flights/ticketPurchase";
+import Airline from "./flights/airline";
 import './App.css';
 
 const Navigation = () => {
@@ -58,6 +59,9 @@ export default function App() {
           </Route>
           <Route path="/purchase">
             <TicketPurchase />
+          </Route>
+          <Route path="/airline">
+            <Airline />
           </Route>
           <Route path="/">
             <Home />

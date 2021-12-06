@@ -252,7 +252,10 @@ Flight.displayStaffFlights = (airline_name, date_1, date_2, depart_name, arrival
 };
 
 Flight.displayCustomersOnFlight = (airline_name, flight_num, departure_date, departure_time, result) => {
-  sql.query('SELECT customer_email FROM Flight, Ticket Where Flight.flight_num=Ticket.flight_num AND Flight.airline_name=Ticket.airline_name AND Flight.departure_date=Ticket.departure_date AND Flight.departure_time=Ticket.departure_time AND Flight.flight_num=? AND Flight.airline_name=? AND Flight.departure_date=? AND Flight.departure_time=?', 
+  sql.query('SELECT customer_email FROM Flight, Ticket Where Flight.flight_num=Ticket.flight_num AND \
+  Flight.airline_name=Ticket.airline_name AND Flight.departure_date=Ticket.departure_date AND \
+  Flight.departure_time=Ticket.departure_time AND Flight.flight_num=? AND Flight.airline_name=? AND \
+  Flight.departure_date=? AND Flight.departure_time=?', 
   [flight_num, airline_name, departure_date, departure_time], (err, res) => {
     if (err) {
         console.log('error: ', err);
@@ -266,7 +269,9 @@ Flight.displayCustomersOnFlight = (airline_name, flight_num, departure_date, dep
 };
 
 Flight.displayFrequentCustomers = (airline_name, result) => {
-  sql.query('CREATE VIEW frequent_customers AS SELECT customer_email, count(Flight.flight_num) AS times_flown FROM Flight, Ticket Where Flight.flight_num=Ticket.flight_num AND Flight.airline_name=Ticket.airline_name AND Flight.departure_date=Ticket.departure_date AND Flight.departure_time=Ticket.departure_time AND Flight.airline_name=? GROUP BY customer_email ', 
+  sql.query('CREATE VIEW frequent_customers AS SELECT customer_email, count(Flight.flight_num) AS times_flown FROM Flight, Ticket \
+  Where Flight.flight_num=Ticket.flight_num AND Flight.airline_name=Ticket.airline_name AND Flight.departure_date=Ticket.departure_date \
+  AND Flight.departure_time=Ticket.departure_time AND Flight.airline_name=? GROUP BY customer_email', 
   airline_name, (err, res) => {
     if (err) {
         console.log('error: ', err);
@@ -294,8 +299,10 @@ Flight.displayMostFrequentCustomer = (result) => {
 };
 
 Flight.displayFlightsOfCustomer = (airline_name, customer_email, result) => {
-  sql.query('SELECT customer_id, flight_num, departure_date, departure_time FROM Flight, Ticket Where Flight.flight_num=Ticket.flight_num AND Flight.airline_name=Ticket.airline_name AND Flight.departure_date=Ticket.departure_date AND Flight.departure_time=Ticket.departure_time AND Flight.airline_name=? AND customer_email=?', 
-  [airline_name, customer_email], (err, res) => {
+  sql.query('SELECT customer_email, Flight.flight_num, Flight.departure_date, Flight.departure_time FROM Flight, Ticket \
+    Where Flight.flight_num=Ticket.flight_num AND Flight.airline_name=Ticket.airline_name AND Flight.departure_date=Ticket.departure_date \
+    AND Flight.departure_time=Ticket.departure_time AND Flight.airline_name=? AND customer_email=?', 
+    [airline_name, customer_email], (err, res) => {
     if (err) {
         console.log('error: ', err);
         result(null, err);
@@ -308,7 +315,8 @@ Flight.displayFlightsOfCustomer = (airline_name, customer_email, result) => {
 };
 
 Flight.displayRevenuePastMonth = (airline_name, result) => {
-  sql.query('SELECT SUM(sold_price) AS Revenue FROM Ticket NATURAL JOIN Flight NATURAL JOIN Purchases WHERE purchase_date BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL -1 MONTH) AND CURRENT_DATE()', 
+  sql.query('SELECT SUM(sold_price) AS Revenue FROM Ticket NATURAL JOIN Flight NATURAL JOIN Purchases WHERE purchase_date \
+  BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL -1 MONTH) AND CURRENT_DATE()', 
   airline_name, (err, res) => {
     if (err) {
         console.log('error: ', err);
@@ -322,7 +330,8 @@ Flight.displayRevenuePastMonth = (airline_name, result) => {
 };
 
 Flight.displayRevenuePastYear = (airline_name, result) => {
-  sql.query('SELECT SUM(sold_price) AS Revenue FROM Ticket NATURAL JOIN Flight NATURAL JOIN Purchases WHERE purchase_date BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL -1 YEAR) AND CURRENT_DATE()', 
+  sql.query('SELECT SUM(sold_price) AS Revenue FROM Ticket NATURAL JOIN Flight NATURAL JOIN Purchases WHERE purchase_date \
+  BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL -1 YEAR) AND CURRENT_DATE()', 
   airline_name, (err, res) => {
     if (err) {
         console.log('error: ', err);
@@ -336,7 +345,8 @@ Flight.displayRevenuePastYear = (airline_name, result) => {
 };
 
 Flight.addNewFlight = (flight, result) => {
-  sql.query("INSERT INTO Flight SET flight_num=?, airline_name=?, airplane_id=?, departure_date=?, departure_time=?, depart_airport=?, arrival_date=?, arrival_time=?, arrival_airport=?, base_price=?, status='ONTIME', avg_rating=0.00, num_of_tickets_booked=0",
+  sql.query("INSERT INTO Flight SET flight_num=?, airline_name=?, airplane_id=?, departure_date=?, departure_time=?, depart_airport=?,\
+  arrival_date=?, arrival_time=?, arrival_airport=?, base_price=?, status='ONTIME', avg_rating=0.00, num_of_tickets_booked=0",
   [flight.flight_number, flight.airline_name, flight.airplane_id, flight.departure_date, flight.departure_time, flight.depart_airport, flight.arrival_date, flight.arrival_time, flight.arrival_airport, flight.base_price], (err, res) => {
     if (err) {
         console.log('error: ', err);
