@@ -11,7 +11,7 @@ class Profile extends Component {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
     };
     this.updateUsername = this.updateUsername.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
@@ -61,6 +61,7 @@ class Profile extends Component {
     })
   }
 
+ 
   render() {
     const loggedInUser = localStorage.getItem('userType');
     if (loggedInUser) {
@@ -105,7 +106,7 @@ class Profile extends Component {
         </Link>
         <br/>
         <Link to='/airline'>
-        <Button className='button'>View Airline Information</Button>
+        <Button className='button'>View Airline Statistics</Button>
         </Link>
         <br/>
         <Link to='/management'>

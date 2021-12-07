@@ -52,6 +52,37 @@ exports.showRangeSpending = (req, res) => {
 });
 };
 
+exports.showPastYearTix = (req, res) => {
+  Flight.displayPastYearTix(req.params.airline_name, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while getting tickets.',
+    });
+  else res.send(data);
+});
+};
+
+exports.showPastMonthTix = (req, res) => {
+  Flight.displayPastMonthTix(req.params.airline_name, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while getting tickets.',
+    });
+  else res.send(data);
+});
+};
+
+exports.showRangeTix = (req, res) => {
+  Flight.displayRangeTix(req.params.start, req.params.end, req.params.airline_name, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while getting tickets.',
+    });
+  else res.send(data);
+});
+};
+
+
 exports.showAirlineRatings = (req, res) => {
   Flight.displayAirlineRatings(req.params.airline_name, (err, data) => {
   if (err)

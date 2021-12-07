@@ -359,7 +359,9 @@ Flight.displayRevenuePastYear = (airline_name, result) => {
 };
 
 Flight.displayTop3Destination3Month = (airline_name, result) => {
-  sql.query('CREATE VIEW top_destinations_3_months AS SELECT arr.city AS destination, SUM(num_of_tickets_booked) AS total_tickets_booked  \
+  sql.query("DROP TABLE IF EXISTS top_destinations_3_months");
+  sql.query("FLUSH TABLE top_destinations_3_months");
+  sql.query('CREATE VIEW top_destinations_3_months AS SELECT arr.city AS destination \
   FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket NATURAL JOIN Purchases WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id \
   AND Flight.airline_name=? AND (Purchases.purchase_date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -3 MONTH) AND CURRENT_DATE()) GROUP BY destination', 
   airline_name, (err, res) => {
@@ -372,7 +374,7 @@ Flight.displayTop3Destination3Month = (airline_name, result) => {
       console.log('Airplanes: ', res);
       result(null, res);
     });
-  sql.query('SELECT * FROM top_destinations ORDER BY total_tickets_booked LIMIT 3 ', 
+  sql.query('SELECT * FROM top_destinations_3_months LIMIT 3 ', 
   airline_name, (err, res) => {
     if (err) {
         console.log('error: ', err);
@@ -386,7 +388,9 @@ Flight.displayTop3Destination3Month = (airline_name, result) => {
 };
 
 Flight.displayTop3DestinationYear = (airline_name, result) => {
-  sql.query('CREATE VIEW top_destinations_year AS SELECT arr.city AS destination, SUM(num_of_tickets_booked) AS total_tickets_booked  \
+  sql.query("DROP TABLE IF EXISTS top_destinations_year");
+  sql.query("FLUSH TABLE top_destinations_year");
+  sql.query('CREATE VIEW top_destinations_year AS SELECT arr.city AS destination, \
   FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket NATURAL JOIN Purchases WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id \
   AND Flight.airline_name=? AND (Purchases.purchase_date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 YEAR) AND CURRENT_DATE()) GROUP BY destination', 
   airline_name, (err, res) => {
@@ -399,7 +403,7 @@ Flight.displayTop3DestinationYear = (airline_name, result) => {
       console.log('Airplanes: ', res);
       result(null, res);
     });
-  sql.query('SELECT * FROM top_destinations ORDER BY total_tickets_booked LIMIT 3', (err, res) => {
+  sql.query('SELECT * FROM top_destinations_year LIMIT 3', (err, res) => {
     if (err) {
         console.log('error: ', err);
         result(null, err);
@@ -486,8 +490,45 @@ Flight.displayRangeSpending = (start, end, customer_email, result) => {
       result(null, res);
     });
 };
+
+Flight.displayPastYearTix = (airline_name, result) => {
+  sql.query("SELECT COUNT(ticket_id) AS tix FROM Ticket NATURAL JOIN Purchases WHERE purchase_date BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL -1 YEAR) AND CURRENT_DATE() AND airline_name=?", 
+    airline_name, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    });
+};
+Flight.displayPastMonthTix = (airline_name, result) => {
+  sql.query("SELECT COUNT(ticket_id) AS tix FROM Ticket NATURAL JOIN Purchases WHERE purchase_date BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL -1 MONTH) AND CURRENT_DATE() AND airline_name=?", 
+  airline_name, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    });
+};
+Flight.displayRangeTix = (start, end, airline_name, result) => {
+  sql.query("SELECT COUNT(ticket_id) AS tix FROM Ticket NATURAL JOIN Purchases \
+            WHERE purchase_date BETWEEN ? AND ? AND airline_name=?", 
+    [start, end, airline_name],(err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    });
+};
+
+
 Flight.displayPrevFlights = (customer_email, result) => {
-  sql.query("SELECT t.airline_name, t.flight_num, f.airplane_id, t.departure_date, t.departure_time FROM Ticket t JOIN Flight f ON t.flight_num = f.flight_num WHERE t.customer_email=? AND t.departure_date < NOW()", 
+  sql.query("SELECT t.airline_name, t.flight_num, f.airplane_id, t.departure_date, t.departure_time FROM Ticket t NATURAL JOIN Flight f WHERE t.customer_email=? AND t.departure_date < NOW()", 
     customer_email, (err, res) => {
     if (err) {
         console.log('error: ', err);

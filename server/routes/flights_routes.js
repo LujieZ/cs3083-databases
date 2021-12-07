@@ -49,6 +49,12 @@ module.exports = (app) => {
 
     app.get('/range-spending/:start/:end/:customer_email', flights.showRangeSpending);
 
+    app.get('/year-tix/:airline_name', flights.showPastYearTix);
+
+    app.get('/month-tix/:airline_name', flights.showPastMonthTix);
+
+    app.get('/range-tix/:start/:end/:airline_name', flights.showRangeTix);
+
     app.post('/customer-rates/:customer_email/:flight_num/:airplane_id/:departure_date/:departure_time/:airline_name/:rating/:comment', flights.createNewRating);
 
     app.put('/flight-status/:flight_num/:airline_name/:departure_date/:departure_time/:status', flights.updateFlightStatus);

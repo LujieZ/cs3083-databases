@@ -19,6 +19,10 @@ export default class Airline extends Component {
       customer_flights: [],
       lastmonth_revenue: '',
       lastyear_revenue: '',
+      startDate: '|',
+      endDate: '|',
+      topDstMonths: [],
+      topDstYear: [],
     };
   }
 
@@ -46,6 +50,31 @@ export default class Airline extends Component {
             lastyear_revenue: res.data[0].Revenue,
         });
       });
+      axios.get(`/year-tix/${staffObj.airline_name}`).then((res) => {
+        console.log(res.data);
+        this.setState({
+            lastYearTix: res.data[0].tix,
+        });
+      });
+      axios.get(`/month-tix/${staffObj.airline_name}`).then((res) => {
+        console.log(res.data);
+        this.setState({
+            lastMonthTix: res.data[0].tix,
+        });
+      });
+      axios.get(`/destination-3month/${staffObj.airline_name}`).then((res) => {
+        console.log(res.data);
+        this.setState({
+            topDstMonths: res.data,
+        });
+        console.log(this.state.topDstMonths)
+      });
+      axios.get(`/destination-year/${staffObj.airline_name}`).then((res) => {
+        console.log(res.data);
+        this.setState({
+            topDstYear: res.data,
+        });
+      });
   }
 
   updateCustomerEmail = (e) => {
@@ -64,6 +93,30 @@ export default class Airline extends Component {
       })
   }
 
+  updateStartRange = (e) => {
+    this.setState({
+      startDate: e.target.value,
+    });
+  }
+
+  updateEndRange = (e) => {
+    this.setState({
+      endDate: e.target.value,
+    });
+  }
+
+  adjustDateRange(){
+    const curState = this.state;
+    const staff = localStorage.getItem('user');
+    const staffObj = JSON.parse(staff);
+    axios.get(`/range-tix/${curState.startDate}/${curState.endDate}/${staffObj.airline_name}`).then((res) => {
+        console.log(res.data);
+        this.setState({
+            rangeTix: res.data[0].tix,
+        });
+    })
+  }
+
   render() {
     const curState = this.state;
     if (localStorage.getItem('userType') !== 'staff') {
@@ -78,6 +131,24 @@ export default class Airline extends Component {
     const listItems = curState.frequent_customers.map((customer) => {
       return <li><b>{customer}</b></li>
     });
+    const dstMonths = curState.topDstMonths.map((dst) => {
+      return (
+        <tr>
+          <td>{dst.destination}</td>
+          <td>{dst.total_tickets_booked}</td>
+        </tr>
+      )
+    });
+
+    const dstYears = curState.topDstYear.map((dst) => {
+      return (
+        <tr>
+          <td>{dst.destination}</td>
+          <td>{dst.total_tickets_booked}</td>
+        </tr>
+      )
+    });
+
     const flightItem = curState.customer_flights.map((flight) => {
         return <p><b>Flight Number: </b>{flight.flight_num}; {' '}
                   <b>Departure Time: </b>{flight.departure_date} {flight.departure_time}; {' '}
@@ -111,9 +182,58 @@ export default class Airline extends Component {
                 Find Flights for Customer
             </Button>
             </form>
+            <h3 style={{'fontSize': '25px', 'marginBottom': '5px'}}>Top 3 Destinations for {staffObj.airline_name}</h3>
+            <table style={{'color': '#372c2e', 'marginBottom': '20px', 'margin-left':'auto', 'margin-right':'auto'}}>
+                  <tr>
+                      <th>Past 3 Months</th>
+                  </tr>
+                  <tbody>
+                      {dstMonths}
+                    </tbody>
+                  </table>
+            <table style={{'color': '#372c2e', 'marginBottom': '20px', 'margin-left':'auto', 'margin-right':'auto'}}>
+                  <tr>
+                      <th>Past Year</th>
+                  </tr>
+                  <tbody>
+                      {dstYears}
+                    </tbody>
+                  </table>
             <h3 style={{'fontSize': '25px', 'marginBottom': '5px'}}>Revenue Information for {staffObj.airline_name}</h3>
-            <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Last Month Revenue: <b>${lastMonthRev}</b></p>
-            <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Last Year Revenue: <b>${lastYearRev}</b></p>
+            <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Past Month: <b>${lastMonthRev}</b></p>
+            <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Past Year: <b>${lastYearRev}</b></p>
+            <h3 style={{'fontSize': '25px', 'marginBottom': '5px'}}>Ticket Sales for {staffObj.airline_name}</h3>
+            <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Past Month: <b>{curState.lastMonthTix}</b></p>
+            <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Past Year: <b>{curState.lastYearTix}</b></p>
+            <p style={{'fontSize': '20px', 'marginBottom': '20px'}}><b>{curState.rangeTix}</b> Tickets Sold Between {curState.startDate} and {curState.endDate}</p>
+            <p style={{'fontSize': '15px', 'marginBottom': '15px'}}>Custom Range:</p>
+            <form>
+                <label style={{'marginBottom': '7px'}}>From: </label>
+                <input
+                type="text"
+                placeholder="YYYY-MM-DD"
+                size="25"
+                onChange={this.updateStartRange}
+                style={{'color': 'black', 'fontSize': '18px'}}
+                />
+                <br/><br/>
+                <label style={{'marginBottom': '7px'}}>To: </label>
+                <input
+                type="text"
+                placeholder="YYYY-MM-DD"
+                size="25"
+                onChange={this.updateEndRange}
+                style={{'color': 'black', 'fontSize': '18px'}}
+                />
+                <br/><br/>
+                <Button
+                    variant='primary'
+                    onClick={() => this.adjustDateRange()}
+                    className='button'>
+                        Adjust Date Range
+                    </Button>
+              </form>
+            
         </div>
     );
   }
