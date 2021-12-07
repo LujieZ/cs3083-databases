@@ -98,6 +98,7 @@ export default class TicketPurchase extends Component {
     }
 
     render() {
+      const curState = this.state;
       const flight = localStorage.getItem('flight');
       const flightObj = JSON.parse(flight);
       console.log(flightObj);
@@ -119,8 +120,13 @@ export default class TicketPurchase extends Component {
       );
       }
       return(
-          <div style={{'color': '#ffffff'}}>
+          <div style={{'color': '#ffffff', 'fontSize': '20px'}}>
           <h2 style={{'fontSize': '35px', 'marginBottom': '50px'}}>Purchase a Ticket</h2>
+            <p>Flight Number: {flightObj.flight_num}</p>
+            <p>Airline Name: {flightObj.airline_name}</p>
+            <p>Departure: {flightObj.departure_date}{' '}{flightObj.departure_time}</p>
+            <p>Amount due: ${curState.soldPrice}</p>
+            <br/>
           <form>
             <label for="left" style={{'marginBottom': '7px', 'marginRight': '15px', 'fontSize': '20px'}}><b>Card Type: </b></label>
             <input
