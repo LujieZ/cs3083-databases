@@ -43,6 +43,12 @@ module.exports = (app) => {
 
     app.get('/airline-avg-rating/:airline_name', flights.showAirlineAvgRating);
 
+    app.get('/year-spending/:customer_email', flights.showYearSpending);
+
+    app.get('/6-month-spending/:customer_email', flights.show6MonthSpending);
+
+    app.get('/range-spending/:start/:end/:customer_email', flights.showRangeSpending);
+
     app.post('/customer-rates/:customer_email/:flight_num/:airplane_id/:departure_date/:departure_time/:airline_name/:rating/:comment', flights.createNewRating);
 
     app.put('/flight-status/:flight_num/:airline_name/:departure_date/:departure_time/:status', flights.updateFlightStatus);

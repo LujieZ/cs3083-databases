@@ -22,6 +22,36 @@ exports.find30DaysFlights = (req, res) => {
     });
 };
 
+exports.showYearSpending = (req, res) => {
+  Flight.displayYearSpending(req.params.customer_email, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while getting spending.',
+    });
+  else res.send(data);
+});
+};
+
+exports.show6MonthSpending = (req, res) => {
+  Flight.display6MonthSpending(req.params.customer_email, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while getting spending.',
+    });
+  else res.send(data);
+});
+};
+
+exports.showRangeSpending = (req, res) => {
+  Flight.displayRangeSpending(req.params.start, req.params.end, req.params.customer_email, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while getting spending.',
+    });
+  else res.send(data);
+});
+};
+
 exports.showAirlineRatings = (req, res) => {
   Flight.displayAirlineRatings(req.params.airline_name, (err, data) => {
   if (err)
@@ -40,8 +70,8 @@ exports.showAirlineAvgRating = (req, res) => {
     });
   else res.send(data);
 });
-
 };
+
 exports.createNewRating = (req, res) => {
   Flight.addRating(req.params.customer_email, req.params.flight_num, req.params.airplane_id, 
     req.params.departure_date, req.params.departure_time, req.params.airline_name, 

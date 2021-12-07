@@ -438,7 +438,7 @@ Flight.displayAirlineAvgRatings = (airline_name, result) => {
 Flight.addRating = (customer_email, flight_num, airplane_id, 
   departure_date, departure_time, airline_name, 
   rating, comment, result) => {
-  sql.query("INSERT INTO Rates VALUES (customer_email, flight_num, airplane_id, departure_date, departure_time, airline_name, rating, comment)", 
+  sql.query("INSERT INTO Rates (customer_email, flight_num, airplane_id, departure_date, departure_time, airline_name, rating, comment) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
     [customer_email, flight_num, airplane_id, 
       departure_date, departure_time, airline_name, 
       rating, comment], (err, res) => {
@@ -452,6 +452,40 @@ Flight.addRating = (customer_email, flight_num, airplane_id,
 };
 
 
+Flight.displayYearSpending = (customer_email, result) => {
+  sql.query("SELECT SUM(sold_price) AS total_sold_price FROM Purchases WHERE purchase_date BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL -1 YEAR) AND CURRENT_DATE() AND customer_email=?", 
+    customer_email, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    });
+};
+Flight.display6MonthSpending = (customer_email, result) => {
+  sql.query("SELECT YEAR(purchase_date) AS year, MONTH(purchase_date) AS month, SUM(sold_price) AS sold_price FROM Purchases WHERE purchase_date BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL -6 MONTH) AND CURRENT_DATE() AND customer_email=? GROUP BY MONTH(purchase_date), YEAR(purchase_date)", 
+    customer_email, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    });
+};
+Flight.displayRangeSpending = (start, end, customer_email, result) => {
+  console.log(customer_email)
+  sql.query("SELECT YEAR(purchase_date) AS year, MONTH(purchase_date) AS month, SUM(sold_price) AS sold_price FROM Purchases WHERE purchase_date BETWEEN ? AND ? AND customer_email=? GROUP BY MONTH(purchase_date), YEAR(purchase_date)", 
+    [start, end, customer_email],(err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    });
+};
 Flight.displayPrevFlights = (customer_email, result) => {
   sql.query("SELECT t.airline_name, t.flight_num, f.airplane_id, t.departure_date, t.departure_time FROM Ticket t JOIN Flight f ON t.flight_num = f.flight_num WHERE t.customer_email=? AND t.departure_date < NOW()", 
     customer_email, (err, res) => {

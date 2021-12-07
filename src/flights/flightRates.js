@@ -277,5 +277,8 @@ export default class Rates extends Component {
           </div>
       );
     }
+    return (
+      <h3 style={{'fontSize': '20px', 'marginBottom': '50px'}}>Sorry, you don't have permission to view this page.</h3>
+    )
   }
 }

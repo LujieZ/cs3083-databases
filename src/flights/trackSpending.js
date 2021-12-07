@@ -17,157 +17,142 @@ export default class TrackSpending extends Component {
     this.state = {
       staff_flights: [],
       customer_flights: [],
-      passagers: [],
-      departure_date1: '',
-      departure_date2: '',
-      departure_location: '',
-      arrival_location: '',
+      yearSpending: [],
+      spending: [],
+      startDate: '',
+      endDate: '',
+      displayDuration: 6,
     };
   }
 
   componentDidMount() {
-    if (localStorage.getItem('userType') === 'staff') {
-      const staff = localStorage.getItem('user');
-      const staffObj = JSON.parse(staff);
-      axios.get(`/flights-staff/${staffObj.airline_name}/-1/-1/-1/-1`).then((res) => {
-        console.log(res.data);
-        this.setState({
-          staff_flights: res.data,
-        });
-        this.updatePassagersOnFlights(staffObj.airline_name)
-      })
-    }
     if (localStorage.getItem('userType') === 'customer') {
       const customer = localStorage.getItem('user');
       const customerObj = JSON.parse(customer);
-      axios.get(`/flights-customer/${customerObj.customer_email}/-1/-1/-1/-1`).then((res) => {
+      axios.get(`/year-spending/${customerObj.customer_email}`).then((res) => {
         console.log(res.data);
         this.setState({
-          customer_flights: res.data,
+            yearSpending: res.data
+        });
+      })
+      axios.get(`/6-month-spending/${customerObj.customer_email}`).then((res) => {
+        console.log(res.data);
+        this.setState({
+            spending: res.data
         });
       })
     }
   }
 
+  updateStartRange = (e) => {
+    this.setState({
+      startDate: e.target.value,
+    });
+  }
+
+  updateEndRange = (e) => {
+    this.setState({
+      endDate: e.target.value,
+    });
+  }
+
+  updateDisplayDuration() {
+    const curState = this.state;
+    const date1 = new Date(curState.startDate);
+    const date2 = new Date(curState.endDate);
+    const diffDays = Math.floor(Math.ceil((Math.abs(date2 - date1)) / (1000 * 60 * 60 * 24)) / 30);
+    this.setState({
+      displayDuration: diffDays
+    });
+  }
+
+  adjustDateRange(){
+    const curState = this.state;
+    this.updateDisplayDuration();
+    const customer = localStorage.getItem('user');
+    const customerObj = JSON.parse(customer);
+    curState.spending = [];
+    axios.get(`/range-spending/${curState.startDate}/${curState.endDate}/${customerObj.customer_email}`).then((res) => {
+        console.log(res.data);
+        this.setState({
+            spending: res.data,
+        });
+    })
+  }
+
   render() {
     const curState = this.state;
-    if (localStorage.getItem('userType') === 'staff') {
-      const staff = localStorage.getItem('user');
-      const staffObj = JSON.parse(staff);
-      let listItems;
-      const staffFlightTrs = curState.staff_flights.map((flight, i) => {
-        if (curState.passagers[i] !== undefined) {
-          listItems = curState.passagers[i].map((passager) => {
-            return <li>{passager}</li>
-          });
-        }
-        return (
-          <tr>
-          <td>{flight.flight_num}</td>
-          <td>{flight.departure_date} {flight.departure_time} From {flight.depart_city}</td>
-          <td>{flight.arrival_date} {flight.arrival_time} At {flight.arrival_city}</td>
-          <td>{flight.status}</td>
-          <td>
-            <ul>{listItems}</ul>
-          </td>
-        </tr>
-        )
-      })
-      return (<div style={{'color': '#ffffff'}}>
-        <h3 style={{'fontSize': '25px', 'marginBottom': '50px'}}>Flights From {staffObj.airline_name}</h3>
-        <table id="flights" style={{'color': '#372c2e', 'marginBottom': '15px', 'margin-left':'auto', 'margin-right':'auto'}}>
-                <tr>
-                    <th>Flight Number</th>
-                    <th>Departure</th>
-                    <th>Arrival</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-                    {staffFlightTrs}
-          </table>
-          <br/>
-          
-      </div>
-      );
-    }
     if (localStorage.getItem('userType') === 'customer') {
-      const customer = localStorage.getItem('user');
-      const customerObj = JSON.parse(customer);
-      const customerFlightTrs = curState.customer_flights.map((flight) => {
-        return (
-          <tr>
-          <td>{flight.flight_num}</td>
-          <td>{flight.ticket_id}</td>
-          <td>{flight.departure_date} {flight.departure_time} From {flight.depart_city}</td>
-          <td>{flight.arrival_date} {flight.arrival_time} At {flight.arrival_city}</td>
-          <td>{flight.status}</td>
-        </tr>
-        )
-      })
-      return (<div style={{'color': '#ffffff'}}>
-        <h3 style={{'fontSize': '25px', 'marginBottom': '50px'}}>My Flights</h3>
-        <table id="flights" style={{'color': '#372c2e', 'marginBottom': '15px', 'margin-left':'auto', 'margin-right':'auto'}}>
-                <tr>
-                    <th>Flight Number</th>
-                    <th>Ticket ID</th>
-                    <th>Departure</th>
-                    <th>Arrival</th>
-                    <th>Status</th>
-                </tr>
-                    {customerFlightTrs}
-          </table>
-          <br/>
-          <form>
-            <label for="depature-date" style={{'marginBottom': '7px'}}>Depature Date: From {' '}</label>
-            <input
-              id="depature-date"
-              type="text"
-              size="25"
-              placeholder='Date in YYYY-mm-DD'
-              onChange={this.updateDepatureDate1}
-              style={{'color': 'black', 'fontSize': '18px'}}
-            />
-            {' '} to {' '}
-            <input
-              id="depature-date"
-              type="text"
-              size="25"
-              placeholder='Date in YYYY-mm-DD'
-              onChange={this.updateDepatureDate2}
-              style={{'color': 'black', 'fontSize': '18px'}}
-            />
-            <br/><br/>
-            <label for="departure-location" style={{'marginBottom': '7px'}}>Departure Location: </label>
-            <input
-              id="departure-location"
-              type="text"
-              size="25"
-              placeholder='Depature City or Airport'
-              onChange={this.updateDepatureLocation}
-              style={{'color': 'black', 'fontSize': '18px'}}
-            />
-            <br/><br/>
-            <label for="arrival-location" style={{'marginBottom': '7px'}}>Arrival Location: </label>
-            <input
-              id="arrival-location"
-              type="text"
-              size="25"
-              placeholder='Arrival City or Airport'
-              onChange={this.updateArrivalLocation}
-              style={{'color': 'black', 'fontSize': '18px'}}
-            />
-            <br/>
-            <Button
-              onClick={() => this.updateCustomerFlights(customerObj.customer_email)}
-              className='button'>
-                Find My Flights
-            </Button>
-          </form>
-      </div>
-      );
+        const yearTrs = curState.yearSpending.map((year) => {
+            return (
+              <tr>
+                <td>{year.total_sold_price}</td>
+              </tr>
+            )
+          });
+        const monthlyTrs = curState.spending.map((month) => {
+            return (
+              <tr>
+                <td>{month.year}</td>
+                <td>{month.month}</td>
+                <td>{month.sold_price}</td>
+              </tr>
+            )
+          });
+        return(
+        <div style={{'color': '#ffffff', 'marginBottom': '70px'}}>
+            <h3 style={{'fontSize': '25px', 'marginBottom': '30px'}}> Track My Spending </h3>
+            <table id="flights" style={{'color': '#372c2e', 'marginBottom': '20px', 'margin-left':'auto', 'margin-right':'auto'}}>
+                  <tr>
+                      <th>Annual Spending</th>
+                  </tr>
+                  <tbody>
+                      {yearTrs}
+                    </tbody>
+                  </table>
+            <p style={{'fontSize': '18px', 'marginBottom': '15px'}}> Spending History for {curState.displayDuration} Months</p>
+            <table id="flights" style={{'color': '#372c2e', 'marginBottom': '20px', 'margin-left':'auto', 'margin-right':'auto'}}>
+                  <tr>
+                      <th>Year</th>
+                      <th>Month</th>
+                      <th>Spending</th>
+                  </tr>
+                  <tbody>
+                      {monthlyTrs}
+                    </tbody>
+                  </table>
+            <p style={{'fontSize': '18px', 'marginBottom': '15px'}}>Adjust Date Range to Display:</p>
+            <form>
+                <label style={{'marginBottom': '7px'}}>From: </label>
+                <input
+                type="text"
+                placeholder="YYYY-MM-DD"
+                size="25"
+                onChange={this.updateStartRange}
+                style={{'color': 'black', 'fontSize': '18px'}}
+                />
+                <br/><br/>
+                <label style={{'marginBottom': '7px'}}>To: </label>
+                <input
+                type="text"
+                placeholder="YYYY-MM-DD"
+                size="25"
+                onChange={this.updateEndRange}
+                style={{'color': 'black', 'fontSize': '18px'}}
+                />
+                <br/><br/>
+                <Button
+                    variant='primary'
+                    onClick={() => this.adjustDateRange()}
+                    className='button'>
+                        Adjust Date Range
+                    </Button>
+            </form>
+        </div>
+        );
     }
-      return (
-        <h3 style={{'fontSize': '20px', 'marginBottom': '50px'}}>Sorry, you don't have permission to view this page.</h3>
-      )
+    return (
+    <h3 style={{'fontSize': '20px', 'marginBottom': '50px'}}>Sorry, you don't have permission to view this page.</h3>
+    )
     }
 }
