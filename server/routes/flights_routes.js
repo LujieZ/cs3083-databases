@@ -10,6 +10,8 @@ module.exports = (app) => {
     app.get('/airplanes/:airline_name', flights.findAllAirplanes);
 
     app.get('/airports', flights.showAllAirports);
+
+    app.get('/max-ticket-id', flights.findMaxTicketId);
     
     app.get('/flights-customer/:customer_email/:date_1/:date_2/:depart_name/:arrival_name',flights.showCustomerFlights);
 
@@ -31,15 +33,13 @@ module.exports = (app) => {
 
     app.get('/revenue-year/:airline_name', flights.showRevenuePastYear);
 
-    app.get('/seats-left/:airline_name/:flight_num/:departure_date/:departure_time', flights.showNumberOfSeatsLeft);
-
     app.get('/destination-3month/:airline_name', flights.showTop3Destination3Month);
 
     app.get('/destination-year/:airline_name', flights.showTop3DestinationYear);
 
     app.put('/flight-status/:flight_num/:airline_name/:departure_date/:departure_time/:status', flights.updateFlightStatus);
 
-    // app.put('/flight-tickets/:flight_num/:airline_name/:departure_date/:departure_time/:flight_num/:airline_name/:departure_date/:departure_time', flights.updateFlightTicekts);
+    app.put('/flight-tickets/:flight_num/:airline_name/:departure_date/:departure_time', flights.updateFlightNumSeats);
 
     app.post('/flight', flights.createNewFlight);
     
@@ -49,5 +49,5 @@ module.exports = (app) => {
 
     app.post('/ticket/:id/:customer_email/:airline_name/:flight_num/:departure_date/:departure_time', flights.createNewTicket);
 
-    app.post('/ticket-purchase/:id/:customer_email/:airline_name/:flight_num/:departure_date/:departure_time', flights.createNewPurchase);
+    app.post('/ticket-purchase/:id/:customer_email/:sold_price/:card_type/:card_num/:card_name/:exp_date', flights.createNewPurchase);
 }
