@@ -94,6 +94,16 @@ exports.showAllAirports = (req, res) => {
     });
 };
 
+exports.findMaxTicketId = (req, res) => {
+  Flight.getMaxTicketId((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occured while showing number of seats left.',
+      });
+    else res.send(data);
+  });
+}
+
 exports.showCustomerFlights = (req, res) => {
   const date_1 = req.params.date_1 === '-1' ? null : req.params.date_1;
   const date_2 = req.params.date_2 === '-1' ? null : req.params.date_2;
@@ -205,16 +215,6 @@ exports.showRevenuePastYear = (req, res) => {
   });
 }
 
-exports.showNumberOfSeatsLeft = (req, res) => {
-  Flight.displayNumberOfSeatsLeft(req.params.airline_name, req.params.flight_num, req.params.departure_date, req.params.departure_time, (err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || 'Some error occured while showing number of seats left.',
-      });
-    else res.send(data);
-  });
-}
-
 exports.showTop3Destination3Month = (req, res) => {
   Flight.displayTop3Destination3Month(req.params.airline_name, (err, data) => {
     if (err)
@@ -268,8 +268,8 @@ exports.updateFlightStatus = (req, res) => {
   });
 }
 
-exports.updateFlightTickets = (req, res) => {
-  Flight.changeFlightTickets(req.params.flight_num, req.params.airline_name, req.params.departure_date, req.params.departure_time, (err, data) => {
+exports.updateFlightNumSeats = (req, res) => {
+  Flight.changeFlightNumSeats(req.params.flight_num, req.params.airline_name, req.params.departure_date, req.params.departure_time, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Some error occurred while changing flight status.',

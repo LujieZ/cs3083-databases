@@ -42,6 +42,20 @@ Flight.displayAllAirports = (result) => {
     });
 };
 
+
+Flight.getMaxTicketId = (result) => {
+  sql.query('SELECT MAX(ticket_id) AS max_ticket_id FROM Ticket', (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      console.log('Ticket: ', res);
+      result(null, res);
+    });
+};
+
 Flight.get30DaysFlights = (airline_name, result) => {
   sql.query('SELECT * FROM Flight WHERE airline_name=? AND departure_date BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)',
   airline_name, (err, res) => {
@@ -97,7 +111,7 @@ Flight.changeFlightStatus = (flight_num, departure_date, departure_time, status,
   });
 };
 
-Flight.changeFlightTickets = (flight_num, airline_name, departure_date, departure_time, result) => {
+Flight.changeFlightNumSeats = (flight_num, airline_name, departure_date, departure_time, result) => {
   sql.query("UPDATE Flight SET num_of_tickets_booked = (SELECT COUNT(flight_num) FROM Ticket WHERE Ticket.flight_num=? AND airline_name=? AND departure_date=? AND departure_time=?) WHERE flight_num=? AND airline_name=? AND departure_date=? AND departure_time=?",
   [flight_num, airline_name, departure_date, departure_time, flight_num, airline_name, departure_date, departure_time], (err, res) => {
     if (err) {
@@ -161,7 +175,7 @@ Flight.displayCustomerFlights = (customer_email, date_1, date_2, depart_name, ar
 };
 
 Flight.getFlightsOneWay = (depart_name, departure_date, arrival_name, result) => {
-  sql.query('SELECT flight_num, base_price, status, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, \
+  sql.query('SELECT flight_num, base_price, num_of_tickets_booked, airplane_id, status, airline_name, departure_date, departure_time, dep.name AS depart_airport_name, \
   dep.city AS depart_city, arrival_date, arrival_time, arr.name AS arrival_airport_name, arr.city as arrival_city \
   FROM (Flight, Airport AS arr, Airport AS dep) WHERE Flight.depart_airport = dep.airport_id AND \
   Flight.arrival_airport = arr.airport_id AND departure_date=? AND (dep.name=? OR dep.city=?) AND (arr.name=? OR arr.city=?)',
@@ -343,22 +357,6 @@ Flight.displayRevenuePastYear = (airline_name, result) => {
       result(null, res);
     });
 };
-
-Flight.displayNumberOfSeatsLeft = (airline_name, flight_num, departure_date, departure_time, result) => {
-  sql.query('SELECT (Airplane.num_seats-Flight.num_of_tickets_booked) AS num_of_seats_left FROM Flight NATURAL JOIN Airplane \
-  Where Flight.airline_name=? AND Flight.flight_num=? AND Flight.departure_date=? AND Flight.departure_time=?', 
-  [airline_name, flight_num, departure_date, departure_time], (err, res) => {
-    if (err) {
-        console.log('error: ', err);
-        result(null, err);
-        return;
-      }
-
-      console.log('Airports: ', res);
-      result(null, res);
-    });
-};
-
 
 Flight.displayTop3Destination3Month = (airline_name, result) => {
   sql.query('CREATE VIEW top_destinations_3_months AS SELECT arr.city AS destination, SUM(num_of_tickets_booked) AS total_tickets_booked  \
