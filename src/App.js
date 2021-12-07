@@ -8,6 +8,8 @@ import Registration from "./profile/registration";
 import Management from "./flights/management";
 import ViewFlights from "./flights/viewFlights";
 import TicketPurchase from "./flights/ticketPurchase";
+import Rates from "./flights/flightRates";
+import TrackSpending from "./flights/trackSpending";
 import Airline from "./flights/airline";
 import './App.css';
 
@@ -62,6 +64,12 @@ export default function App() {
           </Route>
           <Route path="/airline">
             <Airline />
+          </Route>
+          <Route path="/flight-rates">
+            <Rates />
+          </Route>
+          <Route path="/track-spending">
+            <TrackSpending />
           </Route>
           <Route path="/">
             <Home />

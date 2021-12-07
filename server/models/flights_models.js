@@ -413,6 +413,59 @@ Flight.displayTop3DestinationYear = (airline_name, result) => {
     });
 };
 
+Flight.displayAirlineRatings = (airline_name, result) => {
+  sql.query("SELECT flight_num, rating, comment FROM Rates WHERE airline_name=?", 
+    airline_name, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    });
+};
+
+Flight.displayAirlineAvgRatings = (airline_name, result) => {
+  sql.query("SELECT flight_num, departure_date, departure_time, AVG(rating) AS avg_rating FROM Rates WHERE airline_name=? GROUP BY flight_num, departure_date, departure_time", 
+    airline_name, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    });
+};
+
+Flight.addRating = (customer_email, flight_num, airplane_id, 
+  departure_date, departure_time, airline_name, 
+  rating, comment, result) => {
+  sql.query("INSERT INTO Rates VALUES (customer_email, flight_num, airplane_id, departure_date, departure_time, airline_name, rating, comment)", 
+    [customer_email, flight_num, airplane_id, 
+      departure_date, departure_time, airline_name, 
+      rating, comment], (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    });
+};
+
+
+Flight.displayPrevFlights = (customer_email, result) => {
+  sql.query("SELECT t.airline_name, t.flight_num, f.airplane_id, t.departure_date, t.departure_time FROM Ticket t JOIN Flight f ON t.flight_num = f.flight_num WHERE t.customer_email=? AND t.departure_date < NOW()", 
+    customer_email, (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    });
+};
+
 Flight.addNewFlight = (flight, result) => {
   sql.query("INSERT INTO Flight SET flight_num=?, airline_name=?, airplane_id=?, departure_date=?, departure_time=?, depart_airport=?,\
   arrival_date=?, arrival_time=?, arrival_airport=?, base_price=?, status='ONTIME', avg_rating=0.00, num_of_tickets_booked=0",

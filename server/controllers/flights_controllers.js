@@ -22,6 +22,48 @@ exports.find30DaysFlights = (req, res) => {
     });
 };
 
+exports.showAirlineRatings = (req, res) => {
+  Flight.displayAirlineRatings(req.params.airline_name, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while getting ratings.',
+    });
+  else res.send(data);
+});
+};
+
+exports.showAirlineAvgRating = (req, res) => {
+  Flight.displayAirlineAvgRatings(req.params.airline_name, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while getting ratings.',
+    });
+  else res.send(data);
+});
+
+};
+exports.createNewRating = (req, res) => {
+  Flight.addRating(req.params.customer_email, req.params.flight_num, req.params.airplane_id, 
+    req.params.departure_date, req.params.departure_time, req.params.airline_name, 
+    req.params.rating, req.params.comment, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while adding rating.',
+    });
+  else res.send(data);
+});
+};
+
+exports.showPrevFlights = (req, res) => {
+  Flight.displayPrevFlights(req.params.customer_email, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occured while adding rating.',
+    });
+  else res.send(data);
+});
+};
+
 exports.findFlightStatus = (req, res) => {
     Flight.getFlightStatus(req.params.airline_name, req.params.flight_num, req.params.departure_date, req.params.arrival_date, (err, data) => {
     if (err)
@@ -66,6 +108,7 @@ exports.showCustomerFlights = (req, res) => {
   else res.send(data);
 });
 };
+
 
 exports.searchFlightsOneWay = (req, res) => {
   Flight.getFlightsOneWay(req.params.depart_name, req.params.departure_date, req.params.arrival_name, (err, data) => {
@@ -266,7 +309,7 @@ exports.createNewTicket = (req, res) => {
 };
 
 exports.createNewPurchase = (req, res) => {
-  Flight.addNewPurchaset(req.params.id, req.params.customer_email, req.params.sold_price, req.params.card_type, req.params.card_num, req.params.card_name, req.params.exp_date, (err, data) => {
+  Flight.addNewPurchase(req.params.id, req.params.customer_email, req.params.sold_price, req.params.card_type, req.params.card_num, req.params.card_name, req.params.exp_date, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Some error occurred while creating new ticket.',

@@ -38,7 +38,7 @@ class Profile extends Component {
             alert('ERROR! Please check your log in information!!');
             return;
           } else {
-            console.log(res2.data);
+            console.log(res2.data[0].password);
             if (md5(curState.password) !== res2.data[0].password) {
               alert('ERROR! Please check your password!!');
               return;
@@ -73,11 +73,11 @@ class Profile extends Component {
           <Button className='button'>View My Flights</Button>
           </Link>
           <br/>
-          <Link to='/'>
+          <Link to='/flight-rates'>
           <Button className='button'>Rate Previous Flights</Button>
           </Link>
           <br/>
-          <Link to='/'>
+          <Link to='/track-spending'>
           <Button className='button'>Track My Spending</Button>
           </Link>
           <br/>
@@ -100,7 +100,7 @@ class Profile extends Component {
         <Button className='button'>View Flights Information</Button>
         </Link>
         <br/>
-        <Link to='/'>
+        <Link to='/flight-rates'>
         <Button className='button'>View Rating Information</Button>
         </Link>
         <br/>

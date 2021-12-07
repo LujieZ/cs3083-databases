@@ -37,6 +37,14 @@ module.exports = (app) => {
 
     app.get('/destination-year/:airline_name', flights.showTop3DestinationYear);
 
+    app.get('/prev-flights/:customer_email', flights.showPrevFlights);
+
+    app.get('/airline-rates/:airline_name', flights.showAirlineRatings);
+
+    app.get('/airline-avg-rating/:airline_name', flights.showAirlineAvgRating);
+
+    app.post('/customer-rates/:customer_email/:flight_num/:airplane_id/:departure_date/:departure_time/:airline_name/:rating/:comment', flights.createNewRating);
+
     app.put('/flight-status/:flight_num/:airline_name/:departure_date/:departure_time/:status', flights.updateFlightStatus);
 
     // app.put('/flight-tickets/:flight_num/:airline_name/:departure_date/:departure_time/:flight_num/:airline_name/:departure_date/:departure_time', flights.updateFlightTicekts);
