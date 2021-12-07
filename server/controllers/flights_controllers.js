@@ -226,18 +226,8 @@ exports.showCustomersOnFlight = (req, res) => {
   });
 }
 
-exports.showFrequentCustomers = (req, res) => {
-  Flight.displayFrequentCustomers(req.params.airline_name, (err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || 'Some error occured while showing frequent customers.',
-      });
-    else res.send(data);
-  });
-}
-
 exports.showMostFrequentCustomer = (req, res) => {
-  Flight.displayMostFrequentCustomer((err, data) => {
+  Flight.displayMostFrequentCustomer(req.params.airline_name, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Some error occured while showing most frequent customer.',
@@ -287,7 +277,7 @@ exports.showTop3Destination3Month = (req, res) => {
 }
 
 exports.showTop3DestinationYear = (req, res) => {
-  Flight.displayTop3Destination3Month(req.params.airline_name, (err, data) => {
+  Flight.displayTop3DestinationYear(req.params.airline_name, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Some error occured while showing past year top destination.',

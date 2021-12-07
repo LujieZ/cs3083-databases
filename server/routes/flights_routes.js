@@ -23,9 +23,7 @@ module.exports = (app) => {
 
     app.get('/customers/:airline_name/:flight_num/:departure_date/:departure_time', flights.showCustomersOnFlight);
 
-    app.get('/customers/:airline_name', flights.showFrequentCustomers);
-
-    app.get('/customer-most-frequent', flights.showMostFrequentCustomer);
+    app.get('/customer-most-frequent/:airline_name', flights.showMostFrequentCustomer);
 
     app.get('/flights/:airline_name/:customer_email', flights.showFlightsOfCustomer);
 

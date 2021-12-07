@@ -29,8 +29,8 @@ export default class Airline extends Component {
   componentDidMount() {
       const staff = localStorage.getItem('user');
       const staffObj = JSON.parse(staff);
-      axios.get('/customer-most-frequent').then((res) => {
-          console.log(res.data);
+      axios.get(`/customer-most-frequent/${staffObj.airline_name}`).then((res) => {
+          console.log('Most frequent customer: ', res.data);
           let objects = res.data.map((obj) => {
             return obj.customer_email;
           })
@@ -39,38 +39,37 @@ export default class Airline extends Component {
           });
       });
       axios.get(`/revenue-month/${staffObj.airline_name}`).then((res) => {
-          console.log(res.data);
+          console.log('Past month revenue:', res.data);
           this.setState({
-              lastmonth_revenue: res.data[0].Revenue,
+              lastmonth_revenue: res.data[0].revenue,
           });
       });
       axios.get(`/revenue-year/${staffObj.airline_name}`).then((res) => {
-        console.log(res.data);
+        console.log('Past year revenue: ', res.data);
         this.setState({
-            lastyear_revenue: res.data[0].Revenue,
+            lastyear_revenue: res.data[0].revenue,
         });
       });
       axios.get(`/year-tix/${staffObj.airline_name}`).then((res) => {
-        console.log(res.data);
+        console.log('Number of tickets in past year: ', res.data);
         this.setState({
             lastYearTix: res.data[0].tix,
         });
       });
       axios.get(`/month-tix/${staffObj.airline_name}`).then((res) => {
-        console.log(res.data);
+        console.log('Number of tickets in the past month: ', res.data);
         this.setState({
             lastMonthTix: res.data[0].tix,
         });
       });
       axios.get(`/destination-3month/${staffObj.airline_name}`).then((res) => {
-        console.log(res.data);
+        console.log('Top 3 destination in past 3 month: ', res.data);
         this.setState({
             topDstMonths: res.data,
         });
-        console.log(this.state.topDstMonths)
       });
       axios.get(`/destination-year/${staffObj.airline_name}`).then((res) => {
-        console.log(res.data);
+        console.log('Top 3 destination in the past year: ', res.data);
         this.setState({
             topDstYear: res.data,
         });
@@ -105,7 +104,7 @@ export default class Airline extends Component {
     });
   }
 
-  adjustDateRange(){
+  adjustDateRange() {
     const curState = this.state;
     const staff = localStorage.getItem('user');
     const staffObj = JSON.parse(staff);
@@ -139,7 +138,6 @@ export default class Airline extends Component {
         </tr>
       )
     });
-
     const dstYears = curState.topDstYear.map((dst) => {
       return (
         <tr>
@@ -148,7 +146,6 @@ export default class Airline extends Component {
         </tr>
       )
     });
-
     const flightItem = curState.customer_flights.map((flight) => {
         return <p><b>Flight Number: </b>{flight.flight_num}; {' '}
                   <b>Departure Time: </b>{flight.departure_date} {flight.departure_time}; {' '}
@@ -183,22 +180,26 @@ export default class Airline extends Component {
             </Button>
             </form>
             <h3 style={{'fontSize': '25px', 'marginBottom': '5px'}}>Top 3 Destinations for {staffObj.airline_name}</h3>
-            <table style={{'color': '#372c2e', 'marginBottom': '20px', 'margin-left':'auto', 'margin-right':'auto'}}>
-                  <tr>
-                      <th>Past 3 Months</th>
-                  </tr>
-                  <tbody>
-                      {dstMonths}
-                    </tbody>
-                  </table>
-            <table style={{'color': '#372c2e', 'marginBottom': '20px', 'margin-left':'auto', 'margin-right':'auto'}}>
-                  <tr>
-                      <th>Past Year</th>
-                  </tr>
-                  <tbody>
-                      {dstYears}
-                    </tbody>
-                  </table>
+            <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>In the Past 3 Month</p>
+            <table id="flights" style={{'color': '#372c2e', 'marginBottom': '20px', 'margin-left':'auto', 'margin-right':'auto'}}>
+              <tr>
+                <th>Destination</th>
+                <th>Num of tickets booked</th>
+              </tr>
+              <tbody>
+                {dstMonths}
+              </tbody>
+            </table>
+            <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>In the Past Year</p>
+            <table id="flights" style={{'color': '#372c2e', 'marginBottom': '20px', 'margin-left':'auto', 'margin-right':'auto'}}>
+              <tr>
+                <th>Destination</th>
+                <th>Num of tickets booked</th>
+              </tr>
+              <tbody>
+                {dstYears}
+              </tbody>
+            </table>
             <h3 style={{'fontSize': '25px', 'marginBottom': '5px'}}>Revenue Information for {staffObj.airline_name}</h3>
             <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Past Month: <b>${lastMonthRev}</b></p>
             <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Past Year: <b>${lastYearRev}</b></p>
