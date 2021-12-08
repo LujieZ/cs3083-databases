@@ -63,8 +63,8 @@ export default class Status extends Component {
           flights: res.data,
         });
       }).catch((err) => {
-        console.log(err);
-      });;
+        alert("There was a problem. Please try again.");
+      });
     }
 
     render() {

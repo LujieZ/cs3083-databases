@@ -30,7 +30,6 @@ export default class Rates extends Component {
   }
 
   componentDidMount() {
-    console.log("component mount")
     if (localStorage.getItem('userType') === 'staff') {
       console.log("working")
       const staff = localStorage.getItem('user');
@@ -106,11 +105,12 @@ export default class Rates extends Component {
     const customer = localStorage.getItem('user');
     const customerObj = JSON.parse(customer);
     const curState = this.state;
-    // if (curState.airplaneID === '' || curState.airlineName === '' || curState.rate === '' || curState.comment === ''
-    // || curState.depDate === '' || curState.depTime === '') {
-    //     alert('No flight found! Please check your inputs!');
-    //     return;
-    // }
+    if (curState.flightNum === '' || curState.airplaneID === '' || curState.depDate === '' || 
+        curState.depTime === '' || curState.rate === '' || curState.comment === ''
+        || curState.airline_name === '') {
+      alert('ERROR! Please check your inputs!!');
+      return;
+    }
     axios.post(`/customer-rates/${customerObj.customer_email}/${curState.flightNum}/${curState.airplaneID}/${curState.depDate}/${curState.depTime}/${curState.airlineName}/${curState.rate}/${curState.comment}`, config).then(() => {
       this.componentDidMount();
     });

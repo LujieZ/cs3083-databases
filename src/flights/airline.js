@@ -159,7 +159,6 @@ export default class Airline extends Component {
             <h3 style={{'fontSize': '25px', 'marginBottom': '5px'}}>Customer Information for {staffObj.airline_name}</h3>
             <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Most Frequent Customers: </p>
               {listItems}
-            <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Frequent Customers: </p>
             <p style={{'fontSize': '20px', 'marginBottom': '15px'}}>Search Flights for Customer: </p>
               {flightItem}
             <form>
@@ -184,7 +183,7 @@ export default class Airline extends Component {
             <table id="flights" style={{'color': '#372c2e', 'marginBottom': '20px', 'margin-left':'auto', 'margin-right':'auto'}}>
               <tr>
                 <th>Destination</th>
-                <th>Num of tickets booked</th>
+                <th>Tickets Booked</th>
               </tr>
               <tbody>
                 {dstMonths}
@@ -194,7 +193,7 @@ export default class Airline extends Component {
             <table id="flights" style={{'color': '#372c2e', 'marginBottom': '20px', 'margin-left':'auto', 'margin-right':'auto'}}>
               <tr>
                 <th>Destination</th>
-                <th>Num of tickets booked</th>
+                <th>Tickets Booked</th>
               </tr>
               <tbody>
                 {dstYears}

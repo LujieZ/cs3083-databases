@@ -10,6 +10,7 @@ import ViewFlights from "./flights/viewFlights";
 import TicketPurchase from "./flights/ticketPurchase";
 import Rates from "./flights/flightRates";
 import TrackSpending from "./flights/trackSpending";
+import PersonalInfo from "./profile/personalInfo";
 import Airline from "./flights/airline";
 import './App.css';
 
@@ -70,6 +71,9 @@ export default function App() {
           </Route>
           <Route path="/track-spending">
             <TrackSpending />
+          </Route>
+          <Route path="/personal-info">
+            <PersonalInfo />
           </Route>
           <Route path="/">
             <Home />

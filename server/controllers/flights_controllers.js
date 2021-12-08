@@ -135,6 +135,16 @@ exports.findFlightStatus = (req, res) => {
   });
 };
 
+exports.findFlight = (req, res) => {
+  Flight.getFlight(req.params.airline_name, req.params.flight_num, req.params.departure_date, req.params.departure_time, (err, data) => {
+  if (err)
+    res.status(500).send({
+      message: err.message || 'Some error occurred while finding flight.',
+    });
+  else res.send(data);
+});
+};
+
 exports.findAllAirplanes = (req, res) => {
   Flight.getAllAirplanes(req.params.airline_name, (err, data) => {
     if (err)
@@ -155,11 +165,21 @@ exports.showAllAirports = (req, res) => {
     });
 };
 
-exports.findMaxTicketId = (req, res) => {
-  Flight.getMaxTicketId((err, data) => {
+exports.findMaxTicketID = (req, res) => {
+  Flight.getMaxTicketID((err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Some error occured while showing number of seats left.',
+      });
+    else res.send(data);
+  });
+}
+
+exports.findMaxPhoneID = (req, res) => {
+  Flight.getMaxPhoneID((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occured while showing max phone ID.',
       });
     else res.send(data);
   });
@@ -310,7 +330,7 @@ exports.createNewFlight = (req, res) => {
 }
 
 exports.updateFlightStatus = (req, res) => {
-  Flight.changeFlightStatus(req.params.flight_num, req.params.airline_name, req.params.departure_date, req.params.departure_time, req.params.status, (err, data) => {
+  Flight.changeFlightStatus(req.params.flight_num, req.params.departure_date, req.params.departure_time, req.params.status, req.params.airline_name, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Some error occurred while changing flight status.',
@@ -364,6 +384,16 @@ exports.createNewPurchase = (req, res) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Some error occurred while creating new ticket.',
+      });
+    else res.send(data);
+  });
+};
+
+exports.createPhone = (req, res) => {
+  Flight.addPhone(req.params.id, req.params.username, req.params.phone_num, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Some error occurred while adding a phone number.',
       });
     else res.send(data);
   });

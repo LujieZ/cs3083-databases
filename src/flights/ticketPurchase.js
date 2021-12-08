@@ -39,7 +39,7 @@ export default class TicketPurchase extends Component {
         const target = res.data.find((obj) => obj.airplane_id === flightObj.airplane_id);
         console.log('Total number of seats on current flight: ', target.num_seats);
         const sold_price = flightObj.num_of_tickets_booked < 0.75 * target.num_seats ? flightObj.base_price : flightObj.base_price * 1.25;
-        console.log('Projected sold prict: ', sold_price);
+        console.log('Projected sold price: ', sold_price);
         this.setState({
           soldPrice: sold_price,
         });
@@ -83,6 +83,10 @@ export default class TicketPurchase extends Component {
       }
       const flight = localStorage.getItem('flight');
       const flightObj = JSON.parse(flight);
+      if(flightObj.num_of_tickets_booked >= flightObj.num_seats){
+        alert("The flight you have chosen is booked!");
+        return
+      }
       const customer = localStorage.getItem('user');
       const customerObj = JSON.parse(customer);
       axios.post(`/ticket/${curState.ticketId}/${customerObj.customer_email}/${flightObj.airline_name}/${flightObj.flight_num}/${flightObj.departure_date}/${flightObj.departure_time}`).then((res1) => {

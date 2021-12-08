@@ -259,7 +259,7 @@ export default class Flight extends Component {
                     <th>Arrival</th>
                     <th>Base Price</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th>Passengers</th>
                 </tr>
                     {leavingFlightTrs}
             </table>
@@ -272,7 +272,7 @@ export default class Flight extends Component {
                     <th>Arrival</th>
                     <th>Base Price</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th>Passengers</th>
                 </tr>
                     {returningFlightTrs}
             </table>
@@ -307,7 +307,7 @@ export default class Flight extends Component {
                     <th>Arrival</th>
                     <th>Base Price</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th>Passengers</th>
                 </tr>
                     {flightTrs}
             </table>

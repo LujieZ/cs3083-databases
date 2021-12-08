@@ -7,12 +7,16 @@ module.exports = (app) => {
 
     app.get('/flight-status/:airline_name/:flight_num/:departure_date/:arrival_date', flights.findFlightStatus);
 
+    app.get('/get-flight/:airline_name/:flight_num/:departure_date/:departure_time', flights.findFlight);
+
     app.get('/airplanes/:airline_name', flights.findAllAirplanes);
 
     app.get('/airports', flights.showAllAirports);
 
-    app.get('/max-ticket-id', flights.findMaxTicketId);
-    
+    app.get('/max-ticket-id', flights.findMaxTicketID);
+
+    app.get('/max-phone-id', flights.findMaxPhoneID);
+
     app.get('/flights-customer/:customer_email/:date_1/:date_2/:depart_name/:arrival_name',flights.showCustomerFlights);
 
     app.get('/flights-staff/:airline_name/:date_1/:date_2/:depart_name/:arrival_name',flights.showStaffFlights);
@@ -55,7 +59,7 @@ module.exports = (app) => {
 
     app.post('/customer-rates/:customer_email/:flight_num/:airplane_id/:departure_date/:departure_time/:airline_name/:rating/:comment', flights.createNewRating);
 
-    app.put('/flight-status/:flight_num/:airline_name/:departure_date/:departure_time/:status', flights.updateFlightStatus);
+    app.put('/flight-status/:flight_num/:departure_date/:departure_time/:status/:airline_name', flights.updateFlightStatus);
 
     app.put('/flight-tickets/:flight_num/:airline_name/:departure_date/:departure_time', flights.updateFlightNumSeats);
 
@@ -68,4 +72,6 @@ module.exports = (app) => {
     app.post('/ticket/:id/:customer_email/:airline_name/:flight_num/:departure_date/:departure_time', flights.createNewTicket);
 
     app.post('/ticket-purchase/:id/:customer_email/:sold_price/:card_type/:card_num/:card_name/:exp_date', flights.createNewPurchase);
+
+    app.post('/add-phone/:id/:username/:phone_num/', flights.createPhone);
 }

@@ -159,7 +159,7 @@ export default class ViewFlights extends Component {
                     <th>Departure</th>
                     <th>Arrival</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th>Passengers</th>
                 </tr>
                     {staffFlightTrs}
           </table>

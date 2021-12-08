@@ -27,8 +27,8 @@ export default class Management extends Component {
           newFlightArrivalAirport: '',
           newFlightBasePrice: '',
           updateFlightNum: '',
-          updateFlightDepatureDate: '',
-          updateFlightDepatureTime: '',
+          updateFlightDepartureDate: '',
+          updateFlightDepartureTime: '',
           updateStatus: '',
           newAirplaneId: '',
           newAirplaneNumSeats: '',
@@ -159,15 +159,15 @@ export default class Management extends Component {
       });
     } 
 
-    changeFlightDepatureDate = (e) => {
+    changeFlightDepartureDate = (e) => {
       this.setState({
-        updateFlightDepatureDate: e.target.value,
+        updateFlightDepartureDate: e.target.value,
       });
     }
   
-    changeFlightDepatureTime = (e) => {
+    changeFlightDepartureTime = (e) => {
       this.setState({
-        updateFlightDepatureTime: e.target.value,
+        updateFlightDepartureTime: e.target.value,
       });
     }
 
@@ -218,12 +218,23 @@ export default class Management extends Component {
 
     updateFlightStatus = () => {
       const curState = this.state;
-      if (curState.updateFlightNum === '' || curState.updateFlightDepatureDate === '' || curState.updateFlightDepatureTime === '' || curState.updateStatus === '') {
-        console.log('ERROR! Please check your inputs!!');
+      const staff = localStorage.getItem('user');
+      const staffObj = JSON.parse(staff);
+      if (curState.updateFlightNum === '' || curState.updateFlightDepartureDate === '' || curState.updateFlightDepartureTime === '' || curState.updateStatus === '') {
+        alert('ERROR! Please check your inputs!!');
         return;
       }
-      axios.put(`/flight-status/${curState.updateFlightNum}/${curState.updateFlightDepatureDate}/${curState.updateFlightDepatureTime}/${curState.updateStatus}`).then(() => {
-        window.location.reload(false);
+      axios.get(`/get-flight/${staffObj.airline_name}/${curState.updateFlightNum}/${curState.updateFlightDepartureDate}/${curState.updateFlightDepartureTime}`).then((res) => {
+        console.log(res.data);
+        if (res.data.length === 0) {
+          alert("ERROR! Cannot find any flight!");
+          return;
+        }
+        axios.put(`/flight-status/${curState.updateFlightNum}/${curState.updateFlightDepartureDate}/${curState.updateFlightDepartureTime}/${curState.updateStatus}/${staffObj.airline_name}`).then(() => {
+          window.location.reload(false);
+        });
+      }).catch((err) => {
+        alert("There was a problem. Please try again.");
       });
     }
 
@@ -307,7 +318,7 @@ export default class Management extends Component {
               id="departure-date"
               type="text"
               size="25"
-              placeholder='Depature Date'
+              placeholder='Departure Date'
               onChange={this.updateNewFlightDepartureDate}
               style={{'color': 'black', 'fontSize': '18px'}}
             />
@@ -391,23 +402,23 @@ export default class Management extends Component {
               style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/><br/>
-            <label for="departure-date" style={{'marginBottom': '7px'}}>Depature Date: </label>
+            <label for="departure-date" style={{'marginBottom': '7px'}}>Departure Date: </label>
             <input
               id="departure-date"
               type="text"
               size="25"
-              placeholder='Depature Date'
-              onChange={this.changeFlightDepatureDate}
+              placeholder='Departure Date'
+              onChange={this.changeFlightDepartureDate}
               style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/><br/>
-            <label for="depature-time" style={{'marginBottom': '7px'}}>Departure Time: </label>
+            <label for="departure-time" style={{'marginBottom': '7px'}}>Departure Time: </label>
             <input
               id="departure-time"
               type="text"
               size="25"
               placeholder='Departure Time'
-              onChange={this.changeFlightDepatureTime}
+              onChange={this.changeFlightDepartureTime}
               style={{'color': 'black', 'fontSize': '18px'}}
             />
             <br/><br/>

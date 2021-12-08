@@ -43,7 +43,7 @@ Flight.displayAllAirports = (result) => {
 };
 
 
-Flight.getMaxTicketId = (result) => {
+Flight.getMaxTicketID = (result) => {
   sql.query('SELECT MAX(ticket_id) AS max_ticket_id FROM Ticket', (err, res) => {
     if (err) {
         console.log('error: ', err);
@@ -52,6 +52,17 @@ Flight.getMaxTicketId = (result) => {
       }
 
       console.log('Ticket: ', res);
+      result(null, res);
+    });
+};
+
+Flight.getMaxPhoneID = (result) => {
+  sql.query('SELECT MAX(phone_id) AS max_phone_id FROM Staff_Phones', (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
       result(null, res);
     });
 };
@@ -68,6 +79,19 @@ Flight.get30DaysFlights = (airline_name, result) => {
     console.log('Flights: ', res);
     result(null, res);
   });
+};
+
+Flight.getFlight = (airline_name, flight_number, departure_date, departure_time, result) => {
+  sql.query('SELECT * FROM Flight WHERE airline_name=? AND flight_num=? AND departure_date=? AND departure_time=?', 
+  [airline_name, flight_number, departure_date, departure_time], (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      console.log('Flights: ', res);
+      result(null, res);
+    });
 };
 
 Flight.getFlightStatus = (airline_name, flight_number, departure_date, arrival_date, result) => {
@@ -97,9 +121,9 @@ Flight.getAllAirplanes = (airline_name, result) => {
     });
 };
 
-Flight.changeFlightStatus = (flight_num, departure_date, departure_time, status, result) => {
-  sql.query("UPDATE Flight SET status=? WHERE flight_num = ? AND departure_date=? AND departure_time=?",
-  [status, flight_num, departure_date, departure_time], (err, res) => {
+Flight.changeFlightStatus = (flight_num, departure_date, departure_time, status, airline_name, result) => {
+  sql.query("UPDATE Flight SET status=? WHERE flight_num = ? AND departure_date=? AND departure_time=? AND airline_name=?",
+  [status, flight_num, departure_date, departure_time, airline_name], (err, res) => {
     if (err) {
       console.log('error: ', err);
       result(null, err);
@@ -284,9 +308,10 @@ Flight.displayCustomersOnFlight = (airline_name, flight_num, departure_date, dep
 
 Flight.displayMostFrequentCustomer = (airline_name, result) => {
   sql.query('CREATE OR REPLACE VIEW frequent_customers AS SELECT customer_email, count(Flight.flight_num) AS times_flown \
-  FROM Flight, Ticket Where Flight.flight_num=Ticket.flight_num AND Flight.airline_name=Ticket.airline_name \
+  FROM Flight, Ticket WHERE Flight.flight_num=Ticket.flight_num AND Flight.airline_name=Ticket.airline_name \
   AND Flight.departure_date=Ticket.departure_date AND Flight.departure_time=Ticket.departure_time \
-  AND Flight.airline_name=? GROUP BY customer_email', airline_name, (err, res) => {
+  AND Flight.airline_name=? AND (Ticket.departure_date BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL -1 YEAR) AND CURRENT_DATE())\
+  GROUP BY customer_email', airline_name, (err, res) => {
     if (err) {
         console.log('error: ', err);
         result(null, err);
@@ -600,6 +625,18 @@ Flight.addNewPurchase = (ticket_id, customer_email, sold_price, card_type, card_
       }
 
       console.log('Airports: ', res);
+      result(null, res);
+    });
+};
+
+Flight.addPhone = (id, username, phone_num, result) => {
+  sql.query('INSERT INTO Staff_Phones SET phone_id=?, username=?, phone_num=?',
+  [id, username, phone_num], (err, res) => {
+    if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
       result(null, res);
     });
 };

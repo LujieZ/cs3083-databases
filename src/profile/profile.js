@@ -97,6 +97,10 @@ class Profile extends Component {
       return (
         <div style={{'color': '#ffffff'}}>
         <p>You are logged in as {loggedInUser}</p>
+        <Link to='/personal-info'>
+        <Button className='button'>Edit Personal Information</Button>
+        </Link>
+        <br/>
         <Link to='/view-flights'>
         <Button className='button'>View Flights Information</Button>
         </Link>

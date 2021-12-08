@@ -72,6 +72,10 @@ export default class TrackSpending extends Component {
     const customer = localStorage.getItem('user');
     const customerObj = JSON.parse(customer);
     curState.spending = [];
+    if (curState.startDate === '' || curState.endDate === '') {
+      alert('ERROR! Please check your inputs!!');
+      return;
+    }
     axios.get(`/range-spending/${curState.startDate}/${curState.endDate}/${customerObj.customer_email}`).then((res) => {
         console.log(res.data);
         this.setState({
