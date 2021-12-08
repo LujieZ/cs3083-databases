@@ -22,15 +22,20 @@ class PersonalInfo extends Component {
     const curState = this.state;
     const staff = localStorage.getItem('user');
     const staffObj = JSON.parse(staff);
+    if(curState.phone === ''){
+      alert("Please check your input!");
+      return;
+    }
     axios.get(`/max-phone-id`).then((res) => {
-        console.log(res.data);
+        console.log(res.data[0].max_phone_id);
         this.setState({
             phone_id: res.data[0].max_phone_id + 1
         });
+        const phone_id = res.data[0].max_phone_id + 1;
+        axios.post(`/add-phone/${phone_id}/${staffObj.username}/${curState.phone_num}`).then((res1) => {
+          console.log(res1.data);
+        })
       })
-    axios.post(`/add-phone/${curState.phone_id}/${staffObj.username}/${curState.phone_num}`).then((res) => {
-        console.log(res.data);
-    })
   }
  
   render() {

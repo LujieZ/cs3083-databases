@@ -74,7 +74,6 @@ exports.createCustomer = (req, res) => {
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       date_of_birth: req.body.date_of_birth,
-      phone_num: req.body.phone_num,
     });
     console.log(staff);
 

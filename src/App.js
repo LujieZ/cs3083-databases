@@ -21,7 +21,6 @@ const Navigation = () => {
         <Container>
             <Nav className='me-auto'>
               <Nav.Link href='/'>Home</Nav.Link>
-              <Nav.Link href='/about'>About</Nav.Link>
               <Nav.Link href='/status'>Flight Status</Nav.Link>
               <div className='topnav-right'>
                 <Nav.Link href='/profile'>My Account</Nav.Link>
@@ -39,9 +38,6 @@ export default function App() {
       <div className='App'>
         <Navigation />
         <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
           <Route path="/flights">
             <Flight />
           </Route>
@@ -88,14 +84,6 @@ function Home() {
   return (
     <div style={{'color': '#ffffff'}}>
     <Flight />
-    </div>
-  );
-}
-
-function About() {
-  return (
-    <div style={{'color': '#ffffff'}}>
-      <h2>CS-UY 3083 Final Project</h2>
     </div>
   );
 }

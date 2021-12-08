@@ -31,6 +31,7 @@ class Registration extends Component {
         passportCountry: '',
         passportExpiration: '',
         ifStaff: false,
+        phone_id: '',
       };
       this.updateIsStaff = this.updateIsStaff.bind(this);
       this.updateUsername = this.updateUsername.bind(this);
@@ -134,8 +135,19 @@ class Registration extends Component {
           first_name: curState.firstname,
           last_name: curState.lastname,
           date_of_birth: curState.birthday,
-          phone_num: curState.phone,
       }
+      const staff = localStorage.getItem('user');
+      const staffObj = JSON.parse(staff);
+      axios.get(`/max-phone-id`).then((res) => {
+        console.log(res.data[0].max_phone_id);
+        this.setState({
+            phone_id: res.data[0].max_phone_id + 1
+        });
+        const phone_id = res.data[0].max_phone_id + 1;
+        axios.post(`/add-phone/${phone_id}/${staffObj.username}/${curState.phone_num}`).then((res1) => {
+          console.log(res1.data);
+        })
+      })
       axios.post('/staff', qs.stringify(obj), config).then(() => {
       })
     }

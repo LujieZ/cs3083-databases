@@ -22,7 +22,6 @@ const Staff = function createStaff(staff) {
     this.first_name = staff.first_name;
     this.last_name = staff.last_name;
     this.date_of_birth = staff.date_of_birth;
-    this.phone_num = staff.phone_num;
 }
 
 Customer.findCustomerInfo = (customerEmail, result) => {
@@ -68,8 +67,8 @@ Customer.create = (customer, result) => {
 };
 
 Staff.create = (staff, result) => {
-  sql.query('INSERT INTO Airline_Staff SET username=?, first_name=?, last_name=?, password=?, date_of_birth=?, airline_name=?, phone_num=?',
-  [staff.username, staff.first_name, staff.last_name, staff.password, staff.date_of_birth, staff.airline_name, staff.phone_num],
+  sql.query('INSERT INTO Airline_Staff SET username=?, first_name=?, last_name=?, password=?, date_of_birth=?, airline_name=?',
+  [staff.username, staff.first_name, staff.last_name, staff.password, staff.date_of_birth, staff.airline_name],
   (err, res) => {
     if (err) {
       console.log('error: ', err);
