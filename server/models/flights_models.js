@@ -379,7 +379,7 @@ Flight.displayRevenuePastYear = (airline_name, result) => {
 };
 
 Flight.displayTop3Destination3Month = (airline_name, result) => {
-  sql.query('CREATE OR REPLACE VIEW top_destinations_3_months AS SELECT arr.city AS destination, SUM(num_of_tickets_booked) AS total_tickets_booked \
+  sql.query('CREATE OR REPLACE VIEW top_destinations_3_months AS SELECT arr.city AS destination, COUNT(Ticket.ticket_id) AS total_tickets_booked \
   FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket NATURAL JOIN Purchases WHERE Flight.depart_airport = dep.airport_id \
   AND Flight.arrival_airport = arr.airport_id AND Flight.airline_name=? \
   AND (Purchases.purchase_date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -3 MONTH) \
@@ -391,7 +391,7 @@ Flight.displayTop3Destination3Month = (airline_name, result) => {
         return;
       }
     });
-  sql.query('SELECT * FROM top_destinations_3_months LIMIT 3 ', (err, res) => {
+  sql.query('SELECT * FROM top_destinations_3_months ORDER BY total_tickets_booked DESC LIMIT 3 ', (err, res) => {
     if (err) {
         console.log('error: ', err);
         result(null, err);
@@ -404,7 +404,7 @@ Flight.displayTop3Destination3Month = (airline_name, result) => {
 };
 
 Flight.displayTop3DestinationYear = (airline_name, result) => {
-  sql.query('CREATE OR REPLACE VIEW top_destinations_year AS SELECT arr.city AS destination, SUM(num_of_tickets_booked) AS total_tickets_booked \
+  sql.query('CREATE OR REPLACE VIEW top_destinations_year AS SELECT arr.city AS destination, COUNT(Ticket.ticket_id) AS total_tickets_booked \
   FROM (Flight, Airport AS arr, Airport AS dep) NATURAL JOIN Ticket NATURAL JOIN Purchases \
   WHERE Flight.depart_airport = dep.airport_id AND Flight.arrival_airport = arr.airport_id \
   AND Flight.airline_name=? AND (Purchases.purchase_date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 YEAR) AND CURRENT_DATE()) \
@@ -416,7 +416,7 @@ Flight.displayTop3DestinationYear = (airline_name, result) => {
         return;
       }
   });
-  sql.query('SELECT * FROM top_destinations_year LIMIT 3', (err, res) => {
+  sql.query('SELECT * FROM top_destinations_year ORDER BY total_tickets_booked DESC LIMIT 3', (err, res) => {
     if (err) {
         console.log('error: ', err);
         result(null, err);

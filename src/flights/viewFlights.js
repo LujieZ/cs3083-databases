@@ -17,7 +17,7 @@ export default class ViewFlights extends Component {
     this.state = {
       staff_flights: [],
       customer_flights: [],
-      passagers: [],
+      passagers: {},
       departure_date1: '',
       departure_date2: '',
       departure_location: '',
@@ -34,7 +34,7 @@ export default class ViewFlights extends Component {
         this.setState({
           staff_flights: res.data,
         });
-        this.updatePassagersOnFlights(staffObj.airline_name)
+        this.updatePassagersOnFlights(staffObj.airline_name, res.data);
       })
     }
     if (localStorage.getItem('userType') === 'customer') {
@@ -73,20 +73,20 @@ export default class ViewFlights extends Component {
     });
   }
 
-  updatePassagersOnFlights = (airline_name) => {
-    const curState = this.state;
-    const flights = curState.staff_flights;
-    let prevPassagers = [];
+  updatePassagersOnFlights = (airline_name, flights) => {
+    let prevPassagers = {};
     for (let i = 0; i < flights.length; i++) {
       axios.get(`/customers/${airline_name}/${flights[i].flight_num}/${flights[i].departure_date}/${flights[i].departure_time}`).then((res) => {
         let objects = res.data.map((obj) => {
+          console.log("current passager: ", obj.customer_email);
           return obj.customer_email;
         })
-        prevPassagers.push(objects);
+        prevPassagers[i] = objects;
+        objects = [];
         this.setState({
           passagers: prevPassagers,
         })
-        console.log(prevPassagers);
+        console.log("all passageers: ", prevPassagers);
       })
     }
   }
@@ -106,6 +106,7 @@ export default class ViewFlights extends Component {
       this.setState({
         staff_flights: res.data,
       });
+      this.updatePassagersOnFlights(airline_name, res.data);
     })
   }
 

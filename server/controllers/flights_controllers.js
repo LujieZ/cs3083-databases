@@ -313,7 +313,7 @@ exports.createNewFlight = (req, res) => {
     airplane_id: req.body.airplane_id,
     departure_date: req.body.departure_date,
     departure_time: req.body.departure_time,
-    departure_airport: req.body.departure_airport,
+    depart_airport: req.body.departure_airport,
     arrival_date: req.body.arrival_date,
     arrival_time: req.body.arrival_time,
     arrival_airport: req.body.arrival_airport,

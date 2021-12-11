@@ -136,15 +136,13 @@ class Registration extends Component {
           last_name: curState.lastname,
           date_of_birth: curState.birthday,
       }
-      const staff = localStorage.getItem('user');
-      const staffObj = JSON.parse(staff);
       axios.get(`/max-phone-id`).then((res) => {
         console.log(res.data[0].max_phone_id);
         this.setState({
             phone_id: res.data[0].max_phone_id + 1
         });
         const phone_id = res.data[0].max_phone_id + 1;
-        axios.post(`/add-phone/${phone_id}/${staffObj.username}/${curState.phone_num}`).then((res1) => {
+        axios.post(`/add-phone/${phone_id}/${curState.username}/${curState.phone}`).then((res1) => {
           console.log(res1.data);
         })
       })
